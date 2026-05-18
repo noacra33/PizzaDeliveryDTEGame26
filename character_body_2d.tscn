@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bsianlnm18r6k"]
+
+[ext_resource type="Script" uid="uid://c40lyvjoi44py" path="res://character_body_2d.gd" id="1_ij6vw"]
+[ext_resource type="Texture2D" uid="uid://ce422ofj7klpi" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_red.png" id="2_ghijl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44cfe"]
+atlas = ExtResource("2_ghijl")
+region = Rect2(32, 96, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dd465"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44cfe")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=438756754]
+script = ExtResource("1_ij6vw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=480395443]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2612742]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=879234743]
+sprite_frames = SubResource("SpriteFrames_dd465")
