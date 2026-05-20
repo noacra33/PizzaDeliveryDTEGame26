@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://bmwlbuxudumyy"]
+
+[ext_resource type="Script" uid="uid://c40lyvjoi44py" path="res://character_body_2d.gd" id="1_uoj53"]
+[ext_resource type="Texture2D" uid="uid://ce422ofj7klpi" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_red.png" id="2_k61xc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_06lh1"]
+atlas = ExtResource("2_k61xc")
+region = Rect2(32, 96, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_td361"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_06lh1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_72krn"]
+radius = 5.0
+height = 20.0
+
+[node name="Car" type="CharacterBody2D" unique_id=110822917]
+script = ExtResource("1_uoj53")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=880003502]
+position = Vector2(0, 3)
+sprite_frames = SubResource("SpriteFrames_td361")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1267337997]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_72krn")

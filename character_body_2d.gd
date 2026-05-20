@@ -1,17 +1,17 @@
 extends CharacterBody2D
 
 # --- tuning knobs ---
-const ACCELERATION  = 600.0
-const MAX_SPEED     = 400.0
-const FRICTION      = 4.0      # higher = snappier stop
-const TURN_SPEED    = 2.8      # radians per second
-const DRIFT_FACTOR  = 0.92     # how much sideways speed bleeds off (lower = more drift)
-const DRIFT_BRAKE   = 0.60     # less bleed when handbrake held (the slidey feel)
+@export var ACCELERATION : float  = 600.0
+@export var MAX_SPEED  : float   = 400.0
+@export var FRICTION    : float  = 4.0      # higher = snappier stop
+@export var TURN_SPEED   : float = 2.8      # radians per second
+@export var DRIFT_FACTOR : float = 0.92     # how much sideways speed bleeds off (lower = more drift)
+@export var DRIFT_BRAKE  : float = 0.6     # less bleed when handbrake held (the slidey feel)
 
 func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_axis("brake", "accelerate")   # -1 reverse, +1 forward
 	var turn_dir  := Input.get_axis("left", "right") # wait — flipped below
-	var handbrake := Input.is_action_pressed("ui_accept")  # spacebar = handbrake
+	var handbrake := Input.is_action_pressed("handbrake")  # spacebar = handbrake
 
 	# --- turning (only when moving) ---
 	if velocity.length() > 20:

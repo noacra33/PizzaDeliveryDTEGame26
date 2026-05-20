@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cln1aiyw5hpyp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8mfh4"]
+radius = 35.014282
+
+[node name="DeliveryMarker" type="Area2D" unique_id=662422984]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1846774155]
+shape = SubResource("CircleShape2D_8mfh4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1409428879]
