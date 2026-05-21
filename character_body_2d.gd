@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 # --- tuning knobs ---
+const Pizza = preload("res://pizza.tscn")
 @export var ACCELERATION : float  = 600.0
 @export var MAX_SPEED  : float   = 400.0
 @export var FRICTION    : float  = 4.0      # higher = snappier stop
@@ -12,7 +13,13 @@ func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_axis("brake", "accelerate")   # -1 reverse, +1 forward
 	var turn_dir  := Input.get_axis("left", "right") # wait — flipped below
 	var handbrake := Input.is_action_pressed("handbrake")  # spacebar = handbrake
-
+	
+	if Input.is_action_just_pressed("throw_pizza"):
+		var pizza = Pizza.instantiate()
+		pizza.global_position = global_position
+		pizza.launch(Vector2.UP.rotated(rotation))
+		get_tree().current_scene.add_child(pizza)
+		
 	# --- turning (only when moving) ---
 	if velocity.length() > 20:
 		var speed_factor = velocity.length() / MAX_SPEED

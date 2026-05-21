@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bb3vc7l5kyhc5"]
+
+[ext_resource type="Texture2D" uid="uid://c2frc6fi7hdbp" path="res://New Piskel (11).png" id="1_5birb"]
+[ext_resource type="Script" uid="uid://bd6adrudfuv0w" path="res://pizza.gd" id="1_i514n"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i514n"]
+size = Vector2(17, 17)
+
+[node name="Pizza" type="Area2D" unique_id=352463805]
+script = ExtResource("1_i514n")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1964300732]
+texture = ExtResource("1_5birb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1286103979]
+position = Vector2(0.5, -1.5)
+shape = SubResource("RectangleShape2D_i514n")

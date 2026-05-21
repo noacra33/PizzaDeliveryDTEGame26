@@ -1,11 +1,18 @@
 [gd_scene format=3 uid="uid://cln1aiyw5hpyp"]
 
+[ext_resource type="Script" uid="uid://brow5dv50nq4t" path="res://delivery_marker.gd" id="1_rvk4k"]
+[ext_resource type="Texture2D" uid="uid://b6umemyjawdlc" path="res://icon.svg" id="2_wokhu"]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_8mfh4"]
 radius = 35.014282
 
 [node name="DeliveryMarker" type="Area2D" unique_id=662422984]
+script = ExtResource("1_rvk4k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1846774155]
 shape = SubResource("CircleShape2D_8mfh4")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1409428879]
+position = Vector2(9.536743e-07, 0)
+scale = Vector2(0.3749999, 0.39843756)
+texture = ExtResource("2_wokhu")
