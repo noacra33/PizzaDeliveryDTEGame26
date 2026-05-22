@@ -13,6 +13,11 @@ func _on_body_entered(body: Node) -> void:
 	if body.name == "Car":
 		player_inside = true
 		waiting_for_pizza = true
+	if body.name == "Car":
+		player_inside = true
+		waiting_for_pizza = true
+		body.in_delivery_zone = true
+	
 
 func _on_body_exited(body: Node) -> void:
 	if body.name == "Car":
@@ -23,3 +28,4 @@ func receive_pizza() -> void:
 		waiting_for_pizza = false
 		pizza_delivered.emit()
 		queue_free()
+	

@@ -16,41 +16,32 @@ var spawn_points := [
 
 @onready var markers_node     = $DeliveryMarkers
 @onready var progress_bar     = $CanvasLayer/ProgressBar
-@onready var delivery_label   = $CanvasLayer/Label
+
 @onready var win_screen       = $WinScreen
 @onready var job_list         = $CanvasLayer/JobList
 @onready var camera           = $Car/Camera2D
 
-func _ready() -> void:
-	win_screen.hide()
-	progress_bar.max_value = TOTAL_DELIVERIES_TO_WIN
-	progress_bar.value = 0
-	spawn_delivery_markers()
 
-func spawn_delivery_markers() -> void:
-	for child in markers_node.get_children():
-		child.queue_free()
-	var points = spawn_points.duplicate()
-	points.shuffle()
-	for i in 3:
-		var marker = DeliveryMarker.instantiate()
-		marker.global_position = points[i]
-		marker.pizza_delivered.connect(_on_pizza_delivered)
-		markers_node.add_child(marker)
-	_refresh_job_list()
+
+@onready var spawn_points_node = $SpawnPoints
+
+func _get_spawn_positions() -> Array:
+	var positions = []
+	for child in spawn_points_node.get_children():
+		positions.append(child.global_position)
+	return positions
 
 func _on_pizza_delivered() -> void:
 	deliveries_done += 1
 	progress_bar.value = deliveries_done
-	delivery_label.text = "DELIVERIES: %d / %d" % [deliveries_done, TOTAL_DELIVERIES_TO_WIN]
-
 	shake_camera()
 	slow_mo()
+	spawn_delivery_markers()
 
 	if deliveries_done >= TOTAL_DELIVERIES_TO_WIN:
 		trigger_win()
 	else:
-		spawn_delivery_markers()
+		_get_spawn_positions()
 
 func _refresh_job_list() -> void:
 	for child in job_list.get_children():
@@ -77,4 +68,23 @@ func slow_mo() -> void:
 
 func trigger_win() -> void:
 	Engine.time_scale = 1.0
-	win_screen.show()
+#ewwdsareen.show()
+
+func _ready() -> void:
+	print("ready fired")
+#win_screen.hide()
+	progress_bar.max_value = TOTAL_DELIVERIES_TO_WIN
+	progress_bar.value = 0
+	spawn_delivery_markers()
+
+func spawn_delivery_markers() -> void:
+	var points = _get_spawn_positions()
+	points.shuffle()
+	
+	for child in markers_node.get_children():
+		child.queue_free()
+	
+	var marker = DeliveryMarker.instantiate()
+	marker.global_position = points[0]
+	marker.pizza_delivered.connect(_on_pizza_delivered)
+	markers_node.add_child(marker)

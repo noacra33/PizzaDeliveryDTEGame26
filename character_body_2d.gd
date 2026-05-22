@@ -8,13 +8,13 @@ const Pizza = preload("res://pizza.tscn")
 @export var TURN_SPEED   : float = 2.8      # radians per second
 @export var DRIFT_FACTOR : float = 0.92     # how much sideways speed bleeds off (lower = more drift)
 @export var DRIFT_BRAKE  : float = 0.6     # less bleed when handbrake held (the slidey feel)
-
+var in_delivery_zone := false
 func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_axis("brake", "accelerate")   # -1 reverse, +1 forward
 	var turn_dir  := Input.get_axis("left", "right") # wait — flipped below
 	var handbrake := Input.is_action_pressed("handbrake")  # spacebar = handbrake
 	
-	if Input.is_action_just_pressed("throw_pizza"):
+	if Input.is_action_just_pressed("throw_pizza") and in_delivery_zone:
 		var pizza = Pizza.instantiate()
 		pizza.global_position = global_position
 		pizza.launch(Vector2.UP.rotated(rotation))

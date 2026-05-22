@@ -7,6 +7,7 @@
 radius = 35.014282
 
 [node name="DeliveryMarker" type="Area2D" unique_id=662422984]
+z_index = -1
 script = ExtResource("1_rvk4k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1846774155]
