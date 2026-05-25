@@ -3,9 +3,10 @@ extends Area2D
 var velocity := Vector2.ZERO
 const SPEED := 500.0
 const LIFETIME := 2.5
-const HOME_STRENGTH := 18.0  # how hard it steers toward zone center
+const HOME_STRENGTH := 18.0
 
-var target_zone: Area2D = null  # set this when the pizza enters a zone
+var target_zone: Area2D = null
+var throw_origin := Vector2.ZERO
 
 func launch(direction: Vector2) -> void:
 	velocity = direction * SPEED
@@ -13,12 +14,11 @@ func launch(direction: Vector2) -> void:
 
 func _physics_process(delta: float) -> void:
 	if target_zone != null and is_instance_valid(target_zone):
-		# steer velocity toward zone center
 		var to_center = (target_zone.global_position - global_position).normalized()
 		velocity = velocity.lerp(to_center * SPEED, HOME_STRENGTH * delta)
 		
-		# close enough? deliver it
 		if global_position.distance_to(target_zone.global_position) < 20:
+			var throw_distance = throw_origin.distance_to(global_position)
 			target_zone.receive_pizza()
 			queue_free()
 			return

@@ -13,14 +13,15 @@ var spawn_points := [
 	Vector2(-200, -200),
 	Vector2(500, -100),
 ]
-
+var score := 0
+var last_delivery_pos := Vector2.ZERO
 @onready var markers_node     = $DeliveryMarkers
 @onready var progress_bar     = $CanvasLayer/ProgressBar
 
-@onready var win_screen       = $WinScreen
-@onready var job_list         = $CanvasLayer/JobList
-@onready var camera           = $Car/Camera2D
 
+@onready var camera           = $Car/Camera2D
+@onready var score_label      = $CanvasLayer/ScoreDisplay/ScoreLabel
+@onready var high_score_label = $CanvasLayer/ScoreDisplay/HighScoreLabel
 
 
 @onready var spawn_points_node = $SpawnPoints
@@ -30,28 +31,37 @@ func _get_spawn_positions() -> Array:
 	for child in spawn_points_node.get_children():
 		positions.append(child.global_position)
 	return positions
-
-func _on_pizza_delivered() -> void:
+func _update_score_display() -> void:
+	print("updating score display, score: ", score)
+	print("score label: ", score_label)
+	print("high score label: ", high_score_label)
+	score_label.text      = "SCORE: %d" % score
+	high_score_label.text = "BEST: %d" % Names.high_score
+func _on_pizza_delivered(customer_name: String) -> void:
 	deliveries_done += 1
+
+	var current_pos = markers_node.get_children()[0].global_position if markers_node.get_children().size() > 0 else Vector2.ZERO
+	var distance = last_delivery_pos.distance_to(current_pos)
+	last_delivery_pos = current_pos
+
+	var points = min(1000, int(distance))
+	score += points
+
+	var is_new_high = Names.update_high_score(score)
+	if is_new_high:
+		_on_high_score_beaten()
+
 	progress_bar.value = deliveries_done
+	_update_score_display()
 	shake_camera()
 	slow_mo()
 	spawn_delivery_markers()
 
-	if deliveries_done >= TOTAL_DELIVERIES_TO_WIN:
-		trigger_win()
-	else:
-		_get_spawn_positions()
+func _on_high_score_beaten() -> void:
+	# placeholder for now — we'll make this juicy later
+	print("NEW HIGH SCORE: ", score)
 
-func _refresh_job_list() -> void:
-	for child in job_list.get_children():
-		child.queue_free()
-	var i := 1
-	for marker in markers_node.get_children():
-		var lbl = Label.new()
-		lbl.text = "→ Stop #%d" % i
-		job_list.add_child(lbl)
-		i += 1
+
 
 func shake_camera() -> void:
 	var tween = create_tween()
@@ -71,10 +81,10 @@ func trigger_win() -> void:
 #ewwdsareen.show()
 
 func _ready() -> void:
-	print("ready fired")
-#win_screen.hide()
+	last_delivery_pos = $Car.global_position
 	progress_bar.max_value = TOTAL_DELIVERIES_TO_WIN
 	progress_bar.value = 0
+	_update_score_display()
 	spawn_delivery_markers()
 
 func spawn_delivery_markers() -> void:
