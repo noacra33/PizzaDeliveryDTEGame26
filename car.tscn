@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://c40lyvjoi44py" path="res://character_body_2d.gd" id="1_uoj53"]
 [ext_resource type="Texture2D" uid="uid://ce422ofj7klpi" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_red.png" id="2_k61xc"]
+[ext_resource type="Script" uid="uid://ghsvd01yxvyx" path="res://delivery_arrow.gd" id="3_06lh1"]
+[ext_resource type="Texture2D" uid="uid://drtdc84jeinu6" path="res://New Piskel (12).png" id="4_td361"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_06lh1"]
 atlas = ExtResource("2_k61xc")
@@ -32,3 +34,11 @@ sprite_frames = SubResource("SpriteFrames_td361")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1267337997]
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_72krn")
+
+[node name="DeliveryArrow" type="Node2D" parent="." unique_id=89182927]
+script = ExtResource("3_06lh1")
+
+[node name="Sprite2D" type="Sprite2D" parent="DeliveryArrow" unique_id=499074310]
+position = Vector2(1, -15)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_td361")

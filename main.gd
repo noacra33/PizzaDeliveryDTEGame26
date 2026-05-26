@@ -20,21 +20,18 @@ var last_delivery_pos := Vector2.ZERO
 
 
 @onready var camera           = $Car/Camera2D
-@onready var score_label      = $CanvasLayer/ScoreDisplay/ScoreLabel
-@onready var high_score_label = $CanvasLayer/ScoreDisplay/HighScoreLabel
-
-
+@onready var score_label      = $CanvasLayer/ScoreLabel
+@onready var high_score_label = $CanvasLayer/HighScoreLabel
+@onready var delivery_arrow  = $Car/DeliveryArrow
+@onready var distance_label  = $CanvasLayer/DistanceLabel
 @onready var spawn_points_node = $SpawnPoints
-
+@onready var customer_label = $CanvasLayer/CustomerLabel
 func _get_spawn_positions() -> Array:
 	var positions = []
 	for child in spawn_points_node.get_children():
 		positions.append(child.global_position)
 	return positions
 func _update_score_display() -> void:
-	print("updating score display, score: ", score)
-	print("score label: ", score_label)
-	print("high score label: ", high_score_label)
 	score_label.text      = "SCORE: %d" % score
 	high_score_label.text = "BEST: %d" % Names.high_score
 func _on_pizza_delivered(customer_name: String) -> void:
@@ -86,6 +83,10 @@ func _ready() -> void:
 	progress_bar.value = 0
 	_update_score_display()
 	spawn_delivery_markers()
+	var test_label = get_node("CanvasLayer/ScoreLabel")
+	print("test label: ", test_label)
+	test_label.text = "HELLO"
+	print("text set to: ", test_label.text)
 
 func spawn_delivery_markers() -> void:
 	var points = _get_spawn_positions()
@@ -98,3 +99,20 @@ func spawn_delivery_markers() -> void:
 	marker.global_position = points[0]
 	marker.pizza_delivered.connect(_on_pizza_delivered)
 	markers_node.add_child(marker)
+
+func _process(delta: float) -> void:
+	_update_arrow()
+
+func _update_arrow() -> void:
+	var markers = markers_node.get_children()
+	if markers.size() == 0:
+		distance_label.text = ""
+		customer_label.text = ""
+		return
+	
+	var marker = markers[0]
+	delivery_arrow.target = marker
+	
+	var distance = $Car.global_position.distance_to(marker.global_position)
+	distance_label.text  = "NEXT: %dm" % int(distance / 10)
+	customer_label.text  = "DELIVER TO: %s" % marker.customer_name
