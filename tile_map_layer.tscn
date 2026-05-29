@@ -1475,6 +1475,9 @@ texture = ExtResource("1_0ugm7")
 [sub_resource type="TileSet" id="TileSet_uuaxm"]
 sources/0 = SubResource("TileSetAtlasSource_vqaso")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uuaxm"]
+bg_color = Color(0.05249995, 0.63, 0, 1)
+
 [node name="Node2D" type="Node2D" unique_id=2020518571]
 script = ExtResource("1_uuaxm")
 
@@ -1508,11 +1511,13 @@ position_smoothing_speed = 9.43
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=786121978]
 
-[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=828966015]
-offset_left = 112.0
-offset_top = -105.0
-offset_right = 189.0
-offset_bottom = -78.0
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer" unique_id=828966015]
+offset_left = 20.0
+offset_top = 140.0
+offset_right = 97.0
+offset_bottom = 167.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_uuaxm")
+value = 100.0
 
 [node name="ScoreLabel" type="Label" parent="CanvasLayer" unique_id=1182921770]
 offset_left = 20.0
@@ -1544,5 +1549,14 @@ offset_top = 110.0
 offset_right = 60.0
 offset_bottom = 133.0
 theme_override_colors/font_color = Color(0.99215686, 0.011764706, 0.019607844, 1)
+
+[node name="CelebrationLabel" type="Label" parent="CanvasLayer" unique_id=1721941188]
+offset_left = 40.0
+offset_top = 100.0
+offset_right = 166.0
+offset_bottom = 237.0
+theme_override_colors/font_color = Color(1, 0.75, 0, 1)
+theme_override_font_sizes/font_size = 100
+horizontal_alignment = 1
 
 [node name="DeliveryMarkers" type="Node2D" parent="." unique_id=1584698029]

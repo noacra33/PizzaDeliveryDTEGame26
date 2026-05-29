@@ -1,5 +1,6 @@
 extends CharacterBody2D
-
+var health := 100
+const MAX_HEALTH := 100
 # --- tuning knobs ---
 const Pizza = preload("res://pizza.tscn")
 @export var ACCELERATION : float  = 600.0
@@ -48,3 +49,12 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.lerp(Vector2.ZERO, FRICTION * delta)
 
 	move_and_slide()
+
+func take_damage(amount: int) -> void:
+	health -= amount
+	health = max(health, 0)
+	if health <= 0:
+		die()
+
+func die() -> void:
+	get_tree().change_scene_to_file("res://death_screen.tscn")

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://d263qmm01kkkx"]
+
+[ext_resource type="Texture2D" uid="uid://ctwl2aoyqwyni" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/police_cars.png" id="1_0qtrv"]
+[ext_resource type="Script" uid="uid://bjop4d3ibnx2m" path="res://collision_shape_2d.gd" id="2_a157g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhmlj"]
+atlas = ExtResource("1_0qtrv")
+region = Rect2(64, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nip4t"]
+atlas = ExtResource("1_0qtrv")
+region = Rect2(80, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_10vfs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nhmlj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nip4t")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xwtm4"]
+radius = 5.0
+height = 22.0
+
+[node name="Cop" type="CharacterBody2D" unique_id=1329868643]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1789583552]
+sprite_frames = SubResource("SpriteFrames_10vfs")
+autoplay = "default"
+frame_progress = 0.25064486
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=480815645]
+shape = SubResource("CapsuleShape2D_xwtm4")
+script = ExtResource("2_a157g")

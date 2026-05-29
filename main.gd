@@ -5,7 +5,7 @@ const DeliveryMarker = preload("res://delivery_marker.tscn")
 const TOTAL_DELIVERIES_TO_WIN := 10
 
 var deliveries_done := 0
-
+var high_score_beaten := false
 var spawn_points := [
 	Vector2(300, 200),
 	Vector2(-400, 100),
@@ -16,9 +16,9 @@ var spawn_points := [
 var score := 0
 var last_delivery_pos := Vector2.ZERO
 @onready var markers_node     = $DeliveryMarkers
-@onready var progress_bar     = $CanvasLayer/ProgressBar
 
-
+@onready var celebration_label = $CanvasLayer/CelebrationLabel
+@onready var health_bar = $CanvasLayer/HealthBar
 @onready var camera           = $Car/Camera2D
 @onready var score_label      = $CanvasLayer/ScoreLabel
 @onready var high_score_label = $CanvasLayer/HighScoreLabel
@@ -45,19 +45,36 @@ func _on_pizza_delivered(customer_name: String) -> void:
 	score += points
 
 	var is_new_high = Names.update_high_score(score)
-	if is_new_high:
+	if is_new_high and not high_score_beaten:
+		high_score_beaten = true
 		_on_high_score_beaten()
 
-	progress_bar.value = deliveries_done
+	
 	_update_score_display()
 	shake_camera()
 	slow_mo()
 	spawn_delivery_markers()
 
 func _on_high_score_beaten() -> void:
-	# placeholder for now — we'll make this juicy later
-	print("NEW HIGH SCORE: ", score)
+	Names.save_high_score()
+	celebration_label.text = "NEW HIGH SCORE!"
+	celebration_label.modulate = Color(1, 1, 0, 1)
+	var original_pos = celebration_label.position
 
+	var tween = create_tween()
+
+	# flash and shake sequentially in quick bursts
+	for i in 8:
+		tween.tween_callback(func():
+			celebration_label.modulate = Color(1, 1, 0, 1) if i % 2 == 0 else Color(1, 1, 1, 1)
+			celebration_label.position = original_pos + Vector2(randf_range(-8, 8), randf_range(-8, 8))
+		)
+		tween.tween_interval(0.08)
+
+	# reset position then fade out
+	tween.tween_callback(func(): celebration_label.position = original_pos)
+	tween.tween_interval(1.0)
+	tween.tween_property(celebration_label, "modulate:a", 0.0, 1.0)
 
 
 func shake_camera() -> void:
@@ -79,8 +96,7 @@ func trigger_win() -> void:
 
 func _ready() -> void:
 	last_delivery_pos = $Car.global_position
-	progress_bar.max_value = TOTAL_DELIVERIES_TO_WIN
-	progress_bar.value = 0
+
 	_update_score_display()
 	spawn_delivery_markers()
 	var test_label = get_node("CanvasLayer/ScoreLabel")
@@ -102,6 +118,7 @@ func spawn_delivery_markers() -> void:
 
 func _process(delta: float) -> void:
 	_update_arrow()
+	_update_health_bar()
 
 func _update_arrow() -> void:
 	var markers = markers_node.get_children()
@@ -116,3 +133,11 @@ func _update_arrow() -> void:
 	var distance = $Car.global_position.distance_to(marker.global_position)
 	distance_label.text  = "NEXT: %dm" % int(distance / 10)
 	customer_label.text  = "DELIVER TO: %s" % marker.customer_name
+	
+	
+func _return_to_start() -> void:
+	Engine.time_scale = 1.0
+	get_tree().change_scene_to_file("res://start_screen.tscn")
+
+func _update_health_bar() -> void:
+	health_bar.value = $Car.health

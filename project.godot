@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Pizza Game"
-run/main_scene="uid://q0pmj8b0no2x"
+run/main_scene="uid://cpgbqak3glopr"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

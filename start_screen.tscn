@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://cpgbqak3glopr"]
+
+[ext_resource type="Script" uid="uid://coggjtw6kpv3y" path="res://start_screen.gd" id="1_ncxyx"]
+
+[node name="StartScreen" type="Control" unique_id=327093412]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1154.0
+offset_bottom = 658.0
+script = ExtResource("1_ncxyx")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1905867932]
+layout_mode = 0
+offset_left = -6347.0
+offset_top = -4359.0
+offset_right = 10477.0
+offset_bottom = 6655.0
+color = Color(0.47, 0, 0.007833214, 1)
+
+[node name="Title" type="Label" parent="." unique_id=2068240556]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 2.0
+offset_right = 1103.0
+offset_bottom = 325.0
+theme_override_font_sizes/font_size = 176
+text = "Pizza Game"
+
+[node name="StartButton" type="Button" parent="." unique_id=161586225]
+layout_mode = 0
+offset_left = 342.0
+offset_top = 329.0
+offset_right = 704.0
+offset_bottom = 427.0
+theme_override_font_sizes/font_size = 65
+text = "Start Game"
+
+[node name="HighScoreLabel" type="Label" parent="." unique_id=13280323]
+layout_mode = 0
+offset_left = 311.0
+offset_top = 468.0
+offset_right = 750.0
+offset_bottom = 602.0
+theme_override_font_sizes/font_size = 98
+text = "Test"
+
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

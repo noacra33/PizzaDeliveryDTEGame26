@@ -44,3 +44,17 @@ func random_name() -> String:
 	var first = FIRST_NAMES[randi() % FIRST_NAMES.size()]
 	var last  = LAST_NAMES[randi() % LAST_NAMES.size()]
 	return first + " " + last
+const SAVE_PATH = "user://save.cfg"
+
+func save_high_score() -> void:
+	var config = ConfigFile.new()
+	config.set_value("scores", "high_score", high_score)
+	config.save(SAVE_PATH)
+
+func load_high_score() -> void:
+	var config = ConfigFile.new()
+	if config.load(SAVE_PATH) == OK:
+		high_score = config.get_value("scores", "high_score", 0)
+
+func _ready() -> void:
+	load_high_score()
