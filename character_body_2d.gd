@@ -1,5 +1,8 @@
 extends CharacterBody2D
 var health := 100
+var damage_cooldown := 0.0
+const DAMAGE_COOLDOWN_TIME := 1.5
+
 const MAX_HEALTH := 100
 # --- tuning knobs ---
 const Pizza = preload("res://pizza.tscn")
@@ -14,7 +17,7 @@ func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_axis("brake", "accelerate")   # -1 reverse, +1 forward
 	var turn_dir  := Input.get_axis("left", "right") # wait — flipped below
 	var handbrake := Input.is_action_pressed("handbrake")  # spacebar = handbrake
-	
+	damage_cooldown -= delta
 	if Input.is_action_just_pressed("throw_pizza") and in_delivery_zone:
 		var pizza = Pizza.instantiate()
 		pizza.global_position = global_position
@@ -51,10 +54,21 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func take_damage(amount: int) -> void:
+	if damage_cooldown > 0:
+		return
+	damage_cooldown = DAMAGE_COOLDOWN_TIME
 	health -= amount
 	health = max(health, 0)
+	print("took damage, health now: ", health)
 	if health <= 0:
 		die()
 
 func die() -> void:
+	get_tree().get_first_node_in_group("hud").hide()
+	$DeliveryArrow.hide()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var image = get_viewport().get_texture().get_image()
+	var texture = ImageTexture.create_from_image(image)
+	DeathScreen.last_screenshot = texture
 	get_tree().change_scene_to_file("res://death_screen.tscn")

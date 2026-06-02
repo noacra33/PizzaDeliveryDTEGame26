@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://drbrrh83gf1iu"]
+
+[ext_resource type="Script" uid="uid://c8476hrl3p7ld" path="res://death_screen.gd" id="1_ex68u"]
+[ext_resource type="Shader" uid="uid://6xcwiqbs0ov6" path="res://new_shader.gdshader" id="2_6bi5g"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0ggs"]
+shader = ExtResource("2_6bi5g")
+
+[node name="DeathScreen" type="Control" unique_id=1307519183]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ex68u")
+
+[node name="ScreenshotRect" type="TextureRect" parent="." unique_id=536575667]
+material = SubResource("ShaderMaterial_y0ggs")
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BloodRect" type="ColorRect" parent="." unique_id=1504649737]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="." unique_id=1123942042]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 324.0
+offset_right = 158.0
+offset_bottom = 347.0
+scale = Vector2(15.4, 15.4)
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "Wasted"
+horizontal_alignment = 1
+vertical_alignment = 1

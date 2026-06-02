@@ -24,7 +24,7 @@ animations = [{
 radius = 5.0
 height = 20.0
 
-[node name="Car" type="CharacterBody2D" unique_id=110822917]
+[node name="Car" type="CharacterBody2D" unique_id=110822917 groups=["player"]]
 script = ExtResource("1_uoj53")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=880003502]
