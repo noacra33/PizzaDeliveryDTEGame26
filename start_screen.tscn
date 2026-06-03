@@ -1,6 +1,54 @@
 [gd_scene format=3 uid="uid://cpgbqak3glopr"]
 
 [ext_resource type="Script" uid="uid://coggjtw6kpv3y" path="res://start_screen.gd" id="1_ncxyx"]
+[ext_resource type="Texture2D" uid="uid://ce422ofj7klpi" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_red.png" id="2_k1na2"]
+[ext_resource type="Texture2D" uid="uid://c6ifqvn1d2urs" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_purple_dark.png" id="3_vdywr"]
+[ext_resource type="Texture2D" uid="uid://ev1b5fc2o18p" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_purple.png" id="4_cdgt5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l67vj"]
+atlas = ExtResource("2_k1na2")
+region = Rect2(256, 96, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_076lj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l67vj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_udyin"]
+atlas = ExtResource("3_vdywr")
+region = Rect2(336, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7fqbt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_udyin")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6cmq0"]
+atlas = ExtResource("4_cdgt5")
+region = Rect2(336, 128, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vvj22"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6cmq0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="StartScreen" type="Control" unique_id=327093412]
 layout_mode = 3
@@ -19,29 +67,124 @@ color = Color(0.47, 0, 0.007833214, 1)
 
 [node name="Title" type="Label" parent="." unique_id=2068240556]
 layout_mode = 0
-offset_left = 56.0
+offset_left = 92.0
 offset_top = 2.0
-offset_right = 1103.0
-offset_bottom = 325.0
-theme_override_font_sizes/font_size = 176
+offset_right = 1065.0
+offset_bottom = 243.0
+theme_override_font_sizes/font_size = 145
 text = "Pizza Game"
+horizontal_alignment = 1
 
 [node name="StartButton" type="Button" parent="." unique_id=161586225]
 layout_mode = 0
-offset_left = 342.0
-offset_top = 329.0
-offset_right = 704.0
-offset_bottom = 427.0
+offset_left = 370.0
+offset_top = 493.0
+offset_right = 732.0
+offset_bottom = 591.0
 theme_override_font_sizes/font_size = 65
 text = "Start Game"
 
 [node name="HighScoreLabel" type="Label" parent="." unique_id=13280323]
 layout_mode = 0
-offset_left = 311.0
-offset_top = 468.0
-offset_right = 750.0
-offset_bottom = 602.0
-theme_override_font_sizes/font_size = 98
+offset_left = 346.0
+offset_top = 420.0
+offset_right = 785.0
+offset_bottom = 554.0
+theme_override_font_sizes/font_size = 62
 text = "Test"
+horizontal_alignment = 1
+
+[node name="CarContainer" type="HBoxContainer" parent="." unique_id=827135560]
+layout_mode = 0
+offset_left = 244.00002
+offset_top = 167.00002
+offset_right = 414.0
+offset_bottom = 310.0
+scale = Vector2(1.765, 1.765)
+alignment = 1
+
+[node name="CarPanel1" type="PanelContainer" parent="CarContainer" unique_id=1925788520]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CarContainer/CarPanel1" unique_id=1711390777]
+layout_mode = 2
+
+[node name="CarSprite1" type="TextureRect" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=468970439]
+layout_mode = 2
+
+[node name="SpeedLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=1585876816]
+layout_mode = 2
+
+[node name="AccelLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=2140177336]
+layout_mode = 2
+
+[node name="HandlingLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=351333750]
+layout_mode = 2
+
+[node name="SelectButton1" type="Button" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=369479446]
+layout_mode = 2
+text = "Select"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel1" unique_id=868522002]
+position = Vector2(36.827164, 124.645905)
+scale = Vector2(1.75, 1.75)
+sprite_frames = SubResource("SpriteFrames_076lj")
+
+[node name="CarPanel2" type="PanelContainer" parent="CarContainer" unique_id=2059163761]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CarContainer/CarPanel2" unique_id=630388476]
+layout_mode = 2
+
+[node name="CarSprite2" type="TextureRect" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=1534749167]
+layout_mode = 2
+
+[node name="SpeedLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=1969722772]
+layout_mode = 2
+
+[node name="AccelLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=2033978001]
+layout_mode = 2
+
+[node name="HandlingLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=1903968405]
+layout_mode = 2
+
+[node name="SelectButton2" type="Button" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=930485943]
+layout_mode = 2
+text = "Select"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel2" unique_id=955972168]
+position = Vector2(37.750717, 125.77901)
+scale = Vector2(1.5, 1.5)
+sprite_frames = SubResource("SpriteFrames_7fqbt")
+
+[node name="CarPanel3" type="PanelContainer" parent="CarContainer" unique_id=1407143214]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CarContainer/CarPanel3" unique_id=590873343]
+layout_mode = 2
+
+[node name="CarSprite3" type="TextureRect" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=2001757814]
+layout_mode = 2
+
+[node name="SpeedLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=260396813]
+layout_mode = 2
+
+[node name="AccelLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=1881495064]
+layout_mode = 2
+
+[node name="HandlingLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=1936515083]
+layout_mode = 2
+
+[node name="SelectButton3" type="Button" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=584539777]
+layout_mode = 2
+text = "Select"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel3" unique_id=532911960]
+position = Vector2(37.540863, 124.07931)
+scale = Vector2(1.625, 1.625)
+sprite_frames = SubResource("SpriteFrames_vvj22")
 
 [connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="CarContainer/CarPanel1/VBoxContainer/SelectButton1" to="." method="_on_select_button_1_pressed"]
+[connection signal="pressed" from="CarContainer/CarPanel2/VBoxContainer/SelectButton2" to="." method="_on_select_button_2_pressed"]
+[connection signal="pressed" from="CarContainer/CarPanel3/VBoxContainer/SelectButton3" to="." method="_on_select_button_3_pressed"]

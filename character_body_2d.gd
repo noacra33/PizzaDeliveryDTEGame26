@@ -13,6 +13,17 @@ const Pizza = preload("res://pizza.tscn")
 @export var DRIFT_FACTOR : float = 0.92     # how much sideways speed bleeds off (lower = more drift)
 @export var DRIFT_BRAKE  : float = 0.6     # less bleed when handbrake held (the slidey feel)
 var in_delivery_zone := false
+
+
+func _ready() -> void:
+	var car_data = Names.CAR_DATA[Names.selected_car]
+	MAX_SPEED    = car_data.speed        * 80.0
+	ACCELERATION = car_data.acceleration * 120.0
+	FRICTION     = 3.0 - (car_data.handling * 0.3)
+	$CarSprite1.visible = Names.selected_car == 0
+	$CarSprite2.visible = Names.selected_car == 1
+	$CarSprite3.visible = Names.selected_car == 2
+
 func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_axis("brake", "accelerate")   # -1 reverse, +1 forward
 	var turn_dir  := Input.get_axis("left", "right") # wait — flipped below

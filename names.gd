@@ -58,3 +58,25 @@ func load_high_score() -> void:
 
 func _ready() -> void:
 	load_high_score()
+var selected_car := 0
+
+const CAR_DATA = [
+	{
+		"name": "Rusty Roller",
+		"speed": 3,
+		"handling": 5,
+		"acceleration": 3
+	},
+	{
+		"name": "Street Shark",
+		"speed": 5,
+		"handling": 3,
+		"acceleration": 4
+	},
+	{
+		"name": "Pizza Rocket",
+		"speed": 4,
+		"handling": 4,
+		"acceleration": 5
+	}
+]

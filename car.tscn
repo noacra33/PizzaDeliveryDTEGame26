@@ -4,16 +4,18 @@
 [ext_resource type="Texture2D" uid="uid://ce422ofj7klpi" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_red.png" id="2_k61xc"]
 [ext_resource type="Script" uid="uid://ghsvd01yxvyx" path="res://delivery_arrow.gd" id="3_06lh1"]
 [ext_resource type="Texture2D" uid="uid://drtdc84jeinu6" path="res://New Piskel (12).png" id="4_td361"]
+[ext_resource type="Texture2D" uid="uid://hevr6prntm3w" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_blue_dark.png" id="5_72krn"]
+[ext_resource type="Texture2D" uid="uid://ev1b5fc2o18p" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_purple.png" id="6_v0hk8"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_06lh1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_72krn"]
 atlas = ExtResource("2_k61xc")
-region = Rect2(32, 96, 16, 32)
+region = Rect2(256, 96, 16, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_td361"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_06lh1")
+"texture": SubResource("AtlasTexture_72krn")
 }],
 "loop": true,
 "name": &"default",
@@ -24,10 +26,40 @@ animations = [{
 radius = 5.0
 height = 20.0
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_mjudg"]
+atlas = ExtResource("5_72krn")
+region = Rect2(336, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lpol0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mjudg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5era"]
+atlas = ExtResource("6_v0hk8")
+region = Rect2(208, 192, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uhg3g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u5era")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="Car" type="CharacterBody2D" unique_id=110822917 groups=["player"]]
 script = ExtResource("1_uoj53")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=880003502]
+[node name="CarSprite1" type="AnimatedSprite2D" parent="." unique_id=880003502]
 position = Vector2(0, 3)
 sprite_frames = SubResource("SpriteFrames_td361")
 
@@ -42,3 +74,11 @@ script = ExtResource("3_06lh1")
 position = Vector2(1, -15)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("4_td361")
+
+[node name="CarSprite2" type="AnimatedSprite2D" parent="." unique_id=2119052090]
+position = Vector2(0, 3)
+sprite_frames = SubResource("SpriteFrames_lpol0")
+
+[node name="CarSprite3" type="AnimatedSprite2D" parent="." unique_id=1017163022]
+position = Vector2(0, 3)
+sprite_frames = SubResource("SpriteFrames_uhg3g")
