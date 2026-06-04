@@ -35,15 +35,15 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6cmq0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1na2"]
 atlas = ExtResource("4_cdgt5")
-region = Rect2(336, 128, 16, 32)
+region = Rect2(208, 192, 16, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vvj22"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_6cmq0")
+"texture": SubResource("AtlasTexture_k1na2")
 }],
 "loop": true,
 "name": &"default",

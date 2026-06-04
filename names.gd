@@ -65,18 +65,21 @@ const CAR_DATA = [
 		"name": "Rusty Roller",
 		"speed": 3,
 		"handling": 5,
-		"acceleration": 3
+		"acceleration": 3,
+		"drift": 1
 	},
 	{
 		"name": "Street Shark",
 		"speed": 5,
 		"handling": 3,
-		"acceleration": 4
+		"acceleration": 4,
+		"drift": 5
 	},
 	{
 		"name": "Pizza Rocket",
 		"speed": 4,
 		"handling": 4,
-		"acceleration": 5
+		"acceleration": 5,
+		"drift": 3
 	}
 ]
