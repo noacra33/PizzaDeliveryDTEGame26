@@ -1,7 +1,8 @@
 extends Area2D
 
 signal pizza_delivered(customer_name: String)
-
+@onready var marker  = $Circle
+@onready var marker2 = $Circle2
 var player_inside := false
 var waiting_for_pizza := false
 var customer_name := ""
@@ -41,4 +42,8 @@ func _calculate_points(distance: float) -> int:
 		return 500
 	else:
 		return 1000
+		
+func _process(delta):
+	marker.rotation_degrees +=400 * delta
+	marker2.rotation_degrees -=350 * delta
 	
