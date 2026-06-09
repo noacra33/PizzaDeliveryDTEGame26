@@ -3,6 +3,22 @@
 [ext_resource type="Texture2D" uid="uid://ctwl2aoyqwyni" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/police_cars.png" id="1_0qtrv"]
 [ext_resource type="Script" uid="uid://d4jah7ocscnn1" path="res://cop.gd" id="1_a157g"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0qtrv"]
+atlas = ExtResource("1_0qtrv")
+region = Rect2(192, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a157g"]
+atlas = ExtResource("1_0qtrv")
+region = Rect2(208, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10vfs"]
+atlas = ExtResource("1_0qtrv")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwtm4"]
+atlas = ExtResource("1_0qtrv")
+region = Rect2(16, 0, 16, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_nhmlj"]
 atlas = ExtResource("1_0qtrv")
 region = Rect2(64, 0, 16, 32)
@@ -15,13 +31,35 @@ region = Rect2(80, 0, 16, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_0qtrv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a157g")
+}],
+"loop": true,
+"name": &"Fast",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_10vfs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwtm4")
+}],
+"loop": true,
+"name": &"Medium",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_nhmlj")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nip4t")
 }],
 "loop": true,
-"name": &"default",
+"name": &"Slow",
 "speed": 6.0
 }]
 
@@ -34,8 +72,8 @@ script = ExtResource("1_a157g")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1789583552]
 sprite_frames = SubResource("SpriteFrames_10vfs")
-autoplay = "default"
-frame_progress = 0.73640597
+animation = &"Medium"
+autoplay = "Slow"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=480815645]
 shape = SubResource("CapsuleShape2D_xwtm4")

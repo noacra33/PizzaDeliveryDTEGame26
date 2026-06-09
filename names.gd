@@ -1,5 +1,22 @@
 extends Node
 var high_score := 0
+const COP_DATA = [
+	{
+		"speed": 380.0,
+		"damage": 10,
+		"sprite": "Fast"  # fast low damage
+	},
+	{
+		"speed": 200.0,
+		"damage": 35,
+		"sprite": "Slow"  # slow high damage
+	},
+	{
+		"speed": 280.0,
+		"damage": 20,
+		"sprite": "Medium"  # medium
+	}
+]
 const FIRST_NAMES = [
 	"Bob", "Gary", "Derek", "Nigel", "Barry", "Keith", "Trevor", "Clive", "Bazza", "Dazza",
 	"Shazza", "Karen", "Doris", "Marge", "Edna", "Beryl", "Gladys", "Norma", "Vera", "Hilda",

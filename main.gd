@@ -1,9 +1,9 @@
 extends Node2D
-
+var last_spawn_index := -1
 const DeliveryMarker = preload("res://delivery_marker.tscn")
-
+var last_cop_threshold := 0
 const TOTAL_DELIVERIES_TO_WIN := 10
-
+const CopScene = preload("res://cop.tscn")
 var deliveries_done := 0
 var high_score_beaten := false
 var spawn_points := [
@@ -44,12 +44,14 @@ func _on_pizza_delivered(customer_name: String) -> void:
 	var points = min(1000, int(distance))
 	score += points
 
+	_check_cop_spawn()
+
 	var is_new_high = Names.update_high_score(score)
 	if is_new_high and not high_score_beaten:
 		high_score_beaten = true
 		_on_high_score_beaten()
 
-	
+
 	_update_score_display()
 	shake_camera()
 	slow_mo()
@@ -106,13 +108,18 @@ func _ready() -> void:
 
 func spawn_delivery_markers() -> void:
 	var points = _get_spawn_positions()
-	points.shuffle()
+	var available = []
+	for i in points.size():
+		if i != last_spawn_index:
+			available.append(i)
+	available.shuffle()
+	last_spawn_index = available[0]
 	
 	for child in markers_node.get_children():
 		child.queue_free()
 	
 	var marker = DeliveryMarker.instantiate()
-	marker.global_position = points[0]
+	marker.global_position = points[available[0]]
 	marker.pizza_delivered.connect(_on_pizza_delivered)
 	markers_node.add_child(marker)
 
@@ -141,3 +148,15 @@ func _return_to_start() -> void:
 
 func _update_health_bar() -> void:
 	health_bar.value = $Car.health
+func _check_cop_spawn() -> void:
+	var threshold = int(score / 1500) * 1500
+	if threshold > last_cop_threshold:
+		last_cop_threshold = threshold
+		_spawn_cop()
+
+func _spawn_cop() -> void:
+	var cop = CopScene.instantiate()
+	# spawn away from the player
+	var offset = Vector2(randf_range(-400, 400), randf_range(-400, 400)).normalized() * 500
+	cop.global_position = $Car.global_position + offset
+	add_child(cop)

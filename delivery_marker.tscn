@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://cln1aiyw5hpyp"]
 
 [ext_resource type="Script" uid="uid://brow5dv50nq4t" path="res://delivery_marker.gd" id="1_rvk4k"]
-[ext_resource type="Texture2D" uid="uid://b6umemyjawdlc" path="res://icon.svg" id="2_wokhu"]
 [ext_resource type="Texture2D" uid="uid://tpe05kj1iagq" path="res://Sprites/Circle.png" id="3_wokhu"]
-[ext_resource type="Texture2D" uid="uid://bax1rjw8j2yu8" path="res://Sprites/New Piskel (13).png" id="4_vsqu1"]
+[ext_resource type="Texture2D" uid="uid://bax1rjw8j2yu8" path="res://Sprites/Man.png" id="4_vsqu1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8mfh4"]
-radius = 35.014282
+radius = 75.42546
 
 [node name="DeliveryMarker" type="Area2D" unique_id=662422984]
 z_index = -1
@@ -15,12 +14,6 @@ script = ExtResource("1_rvk4k")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1846774155]
 shape = SubResource("CircleShape2D_8mfh4")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1409428879]
-visible = false
-position = Vector2(9.536743e-07, 0)
-scale = Vector2(0.3749999, 0.39843756)
-texture = ExtResource("2_wokhu")
-
 [node name="Circle" type="Sprite2D" parent="." unique_id=634694629]
 texture = ExtResource("3_wokhu")
 
@@ -28,5 +21,5 @@ texture = ExtResource("3_wokhu")
 scale = Vector2(0.93, 0.93)
 texture = ExtResource("3_wokhu")
 
-[node name="NewPiskel(13)" type="Sprite2D" parent="." unique_id=788416972]
+[node name="Man" type="Sprite2D" parent="." unique_id=788416972]
 texture = ExtResource("4_vsqu1")
