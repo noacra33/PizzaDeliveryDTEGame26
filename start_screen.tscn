@@ -77,19 +77,19 @@ horizontal_alignment = 1
 
 [node name="StartButton" type="Button" parent="." unique_id=161586225]
 layout_mode = 0
-offset_left = 370.0
-offset_top = 493.0
-offset_right = 732.0
-offset_bottom = 591.0
+offset_left = 546.0
+offset_top = 530.0
+offset_right = 908.0
+offset_bottom = 628.0
 theme_override_font_sizes/font_size = 65
 text = "Start Game"
 
 [node name="HighScoreLabel" type="Label" parent="." unique_id=13280323]
 layout_mode = 0
-offset_left = 346.0
-offset_top = 420.0
-offset_right = 785.0
-offset_bottom = 554.0
+offset_left = 61.0
+offset_top = 535.0
+offset_right = 500.0
+offset_bottom = 669.0
 theme_override_font_sizes/font_size = 62
 text = "Test"
 horizontal_alignment = 1
@@ -99,7 +99,7 @@ layout_mode = 0
 offset_left = 244.00002
 offset_top = 167.00002
 offset_right = 414.0
-offset_bottom = 310.0
+offset_bottom = 359.068
 scale = Vector2(1.765, 1.765)
 alignment = 1
 
@@ -121,12 +121,15 @@ layout_mode = 2
 [node name="HandlingLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=351333750]
 layout_mode = 2
 
+[node name="HealthLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=237882016]
+layout_mode = 2
+
 [node name="SelectButton1" type="Button" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=369479446]
 layout_mode = 2
 text = "Select"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel1" unique_id=868522002]
-position = Vector2(36.827164, 124.645905)
+position = Vector2(35.127464, 164.30595)
 scale = Vector2(1.75, 1.75)
 sprite_frames = SubResource("SpriteFrames_076lj")
 
@@ -148,12 +151,15 @@ layout_mode = 2
 [node name="HandlingLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=1903968405]
 layout_mode = 2
 
+[node name="HealthLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=832691267]
+layout_mode = 2
+
 [node name="SelectButton2" type="Button" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=930485943]
 layout_mode = 2
 text = "Select"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel2" unique_id=955972168]
-position = Vector2(37.750717, 125.77901)
+position = Vector2(38.31729, 164.30595)
 scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_7fqbt")
 
@@ -175,12 +181,15 @@ layout_mode = 2
 [node name="HandlingLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=1936515083]
 layout_mode = 2
 
+[node name="HealthLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=238598352]
+layout_mode = 2
+
 [node name="SelectButton3" type="Button" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=584539777]
 layout_mode = 2
 text = "Select"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel3" unique_id=532911960]
-position = Vector2(37.540863, 124.07931)
+position = Vector2(34.70821, 162.03964)
 scale = Vector2(1.625, 1.625)
 sprite_frames = SubResource("SpriteFrames_vvj22")
 

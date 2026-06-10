@@ -8,7 +8,8 @@ const STAT_EMPTY    = "░"
 const MAX_STAT      = 5
 
 func _ready() -> void:
-	high_score_label.text = "BEST: %d" % Names.high_score
+	Names.load_high_score()
+	$HighScoreLabel.text = "BEST: %d" % Names.high_score
 	_setup_car_panels()
 
 func _setup_car_panels() -> void:
@@ -16,10 +17,10 @@ func _setup_car_panels() -> void:
 		var car = Names.CAR_DATA[i]
 		var panel_num = i + 1
 		
-		get_node("CarContainer/CarPanel%d/VBoxContainer/SpeedLabel%d" % [panel_num, panel_num]).text = "SPD  " + _stat_bar(car.speed)
+		get_node("CarContainer/CarPanel%d/VBoxContainer/SpeedLabel%d" % [panel_num, panel_num]).text   = "SPD  " + _stat_bar(car.speed)
 		get_node("CarContainer/CarPanel%d/VBoxContainer/HandlingLabel%d" % [panel_num, panel_num]).text = "HND  " + _stat_bar(car.handling)
-		get_node("CarContainer/CarPanel%d/VBoxContainer/AccelLabel%d" % [panel_num, panel_num]).text = "ACC  " + _stat_bar(car.acceleration)
-
+		get_node("CarContainer/CarPanel%d/VBoxContainer/AccelLabel%d" % [panel_num, panel_num]).text   = "ACC  " + _stat_bar(car.acceleration)
+		get_node("CarContainer/CarPanel%d/VBoxContainer/HealthLabel%d" % [panel_num, panel_num]).text  = "HP   " + _stat_bar(car.health / 40)
 func _stat_bar(value: int) -> String:
 	var bar := ""
 	for i in MAX_STAT:

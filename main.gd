@@ -13,6 +13,7 @@ var spawn_points := [
 	Vector2(-200, -200),
 	Vector2(500, -100),
 ]
+
 var score := 0
 var last_delivery_pos := Vector2.ZERO
 @onready var markers_node     = $DeliveryMarkers
@@ -97,6 +98,7 @@ func trigger_win() -> void:
 #ewwdsareen.show()
 
 func _ready() -> void:
+	health_bar.max_value = Names.CAR_DATA[Names.selected_car].health
 	last_delivery_pos = $Car.global_position
 
 	_update_score_display()

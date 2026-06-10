@@ -1,10 +1,11 @@
 extends CharacterBody2D
-var health := 100
+
 var damage_cooldown := 0.0
 const DAMAGE_COOLDOWN_TIME := 1.5
-const MAX_HEALTH := 100
-const Pizza = preload("res://pizza.tscn")
 
+const Pizza = preload("res://pizza.tscn")
+var health := 100
+var MAX_HEALTH := 100
 @export var ACCELERATION : float = 600.0
 @export var MAX_SPEED    : float = 400.0
 @export var FRICTION     : float = 4.0
@@ -17,6 +18,8 @@ var in_delivery_zone := false
 
 func _ready() -> void:
 	var car_data = Names.CAR_DATA[Names.selected_car]
+	MAX_HEALTH = car_data.health
+	health     = MAX_HEALTH
 	MAX_SPEED    = car_data.speed        * 55.0 +100  # 3-5 = 165-275 (slower, closer together)
 	ACCELERATION = car_data.acceleration * 80.0  +100 # 3-5 = 240-400
 	FRICTION     = 3.0 - (car_data.handling * 0.2) # tighter range

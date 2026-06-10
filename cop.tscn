@@ -65,7 +65,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xwtm4"]
 radius = 5.0
-height = 22.0
+height = 18.0
 
 [node name="Cop" type="CharacterBody2D" unique_id=1329868643]
 script = ExtResource("1_a157g")

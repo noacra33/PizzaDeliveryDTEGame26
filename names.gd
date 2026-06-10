@@ -74,7 +74,8 @@ func load_high_score() -> void:
 		high_score = config.get_value("scores", "high_score", 0)
 
 func _ready() -> void:
-	load_high_score()
+	Names.load_high_score()
+
 var selected_car := 0
 
 const CAR_DATA = [
@@ -83,20 +84,23 @@ const CAR_DATA = [
 		"speed": 3,
 		"handling": 5,
 		"acceleration": 3,
-		"drift": 1
+		"drift": 1,
+		"health": 200
 	},
 	{
 		"name": "Street Shark",
 		"speed": 5,
 		"handling": 3,
 		"acceleration": 4,
-		"drift": 5
+		"drift": 5,
+		"health": 100
 	},
 	{
 		"name": "Pizza Rocket",
 		"speed": 4,
 		"handling": 4,
 		"acceleration": 5,
-		"drift": 3
+		"drift": 3,
+		"health": 150
 	}
 ]
