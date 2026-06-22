@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c6bu51hkqhnrq"]
+
+[ext_resource type="Texture2D" uid="uid://vejirxgmmifb" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/normal_vehiches.png" id="1_ysele"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_61ijl"]
+atlas = ExtResource("1_ysele")
+region = Rect2(0, 48, 16, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_61ijl")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g4v7s"]
+radius = 6.0
+height = 38.0
+
+[node name="Truck" type="AnimatedSprite2D" unique_id=2016509107]
+sprite_frames = SubResource("SpriteFrames_g4v7s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1609719989]
+shape = SubResource("CapsuleShape2D_g4v7s")
