@@ -1,50 +1,65 @@
 extends CharacterBody2D
 
-var CHASE_SPEED := 210.0
-var RAM_DAMAGE  := 20
-const ACCELERATION := 3.0
+var CHASE_SPEED := 245.0
+var RAM_DAMAGE  := 15
+var TURN_SPEED  := 7.0
+const ACCELERATION := 4.0
 
 var player: Node2D = null
 var ram_cooldown := 0.0
-const RAM_COOLDOWN_TIME := 1.0
-@onready var sprite  = $AnimatedSprite2D
-var TURN_SPEED := 3.0
+const RAM_COOLDOWN_TIME := 1.2
+
+var stuck_timer := 0.0
+var last_pos := Vector2.ZERO
+const STUCK_TIME := 1.5
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	var roll = randf()
 	var cop_type: int
 	if roll < 0.5:
-		cop_type = 0    # medium 50%
+		cop_type = 2
 	elif roll < 0.75:
-		cop_type = 1    # fast 25%
+		cop_type = 0
 	else:
-		cop_type = 2    # slow 25%
+		cop_type = 1
+
 	var data = Names.COP_DATA[cop_type]
 	CHASE_SPEED = data.speed
 	RAM_DAMAGE  = data.damage
-	TURN_SPEED = 12.0 if cop_type == 0 else 6.0  # fast cop very snappy, others decent
-	sprite.animation = Names.COP_DATA[cop_type]["sprite"]
+	TURN_SPEED  = data.turn
+
+	var anim_name = ["Fast", "Medium", "Slow"][cop_type]
+	$AnimatedSprite2D.play(anim_name)
+
+	last_pos = global_position
 
 func _physics_process(delta: float) -> void:
 	if player == null:
 		return
-	
+
 	ram_cooldown -= delta
 
+	stuck_timer += delta
+	if stuck_timer > STUCK_TIME:
+		stuck_timer = 0.0
+		if global_position.distance_to(last_pos) < 20:
+			var offset = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized() * 500
+			global_position = player.global_position + offset
+		last_pos = global_position
+
 	var direction = (player.global_position - global_position).normalized()
-	
-	# movement follows direction instantly
-	velocity = velocity.lerp(direction * CHASE_SPEED, ACCELERATION * delta)
-	
-	# visual rotation lerps to match velocity direction, not target direction
-	# this makes it look like the car is actually turning, not teleporting
+
+	var target_velocity = direction * CHASE_SPEED
+	velocity = velocity.lerp(target_velocity, ACCELERATION * delta)
+	velocity = velocity.limit_length(CHASE_SPEED * 1.2)
+
 	if velocity.length() > 10:
 		var target_angle = velocity.angle() + PI / 2
 		rotation = lerp_angle(rotation, target_angle, TURN_SPEED * delta)
-	
+
 	move_and_slide()
-	
+
 	if ram_cooldown <= 0:
 		for i in get_slide_collision_count():
 			var collision = get_slide_collision(i)

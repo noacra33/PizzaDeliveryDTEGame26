@@ -2,19 +2,22 @@ extends Node
 var high_score := 0
 const COP_DATA = [
 	{
-		"speed": 380.0,
-		"damage": 10,
-		"sprite": "Fast"  # fast low damage
+		"speed": 290.0,
+		"damage": 8,
+		"turn": 10.0,
+		"sprite": "Fast"
 	},
 	{
-		"speed": 200.0,
-		"damage": 35,
-		"sprite": "Slow"  # slow high damage
+		"speed": 210.0,
+		"damage": 25,
+		"turn": 5.0,
+		"sprite": "Slow"
 	},
 	{
-		"speed": 280.0,
-		"damage": 20,
-		"sprite": "Medium"  # medium
+		"speed": 245.0,
+		"damage": 15,
+		"turn": 7.0,
+		"sprite": "Medium"
 	}
 ]
 const FIRST_NAMES = [

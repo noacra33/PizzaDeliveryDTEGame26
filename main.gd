@@ -156,9 +156,12 @@ func _check_cop_spawn() -> void:
 		last_cop_threshold = threshold
 		_spawn_cop()
 
+var cop_spawn_angle := 0.0
+
 func _spawn_cop() -> void:
 	var cop = CopScene.instantiate()
-	# spawn away from the player
-	var offset = Vector2(randf_range(-400, 400), randf_range(-400, 400)).normalized() * 500
+	cop_spawn_angle += 137.5
+	var angle_rad = deg_to_rad(cop_spawn_angle)
+	var offset = Vector2(cos(angle_rad), sin(angle_rad)) * 550
 	cop.global_position = $Car.global_position + offset
 	add_child(cop)
