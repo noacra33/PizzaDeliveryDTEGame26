@@ -1,17 +1,17 @@
-[gd_scene format=3 uid="uid://dh1quqyymeoy4"]
+[gd_scene format=3 uid="uid://cfdyt3tposyra"]
 
-[ext_resource type="Texture2D" uid="uid://vejirxgmmifb" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/normal_vehiches.png" id="1_g8lor"]
-[ext_resource type="Script" uid="uid://dmiy85g771x1" path="res://traffic_car.gd" id="1_oktw3"]
+[ext_resource type="Script" uid="uid://dmiy85g771x1" path="res://traffic_car.gd" id="1_id5sa"]
+[ext_resource type="Texture2D" uid="uid://vejirxgmmifb" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/normal_vehiches.png" id="2_3fpuv"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_40usd"]
-atlas = ExtResource("1_g8lor")
-region = Rect2(160, 48, 16, 48)
+[sub_resource type="AtlasTexture" id="AtlasTexture_id5sa"]
+atlas = ExtResource("2_3fpuv")
+region = Rect2(16, 0, 16, 48)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_40usd")
+"texture": SubResource("AtlasTexture_id5sa")
 }],
 "loop": 1,
 "name": &"default",
@@ -20,14 +20,15 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g4v7s"]
 radius = 5.0
-height = 22.0
+height = 38.0
 
 [node name="TrafficCar" type="CharacterBody2D" unique_id=1396339124]
-script = ExtResource("1_oktw3")
+script = ExtResource("1_id5sa")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=283356759]
 position = Vector2(0, 9)
 sprite_frames = SubResource("SpriteFrames_g4v7s")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=567614497]
+position = Vector2(0, 8)
 shape = SubResource("CapsuleShape2D_g4v7s")
