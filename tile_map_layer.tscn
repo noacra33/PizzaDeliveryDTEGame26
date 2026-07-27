@@ -4995,3 +4995,8 @@ collision_mask = 9
 path = NodePath("..")
 speed = 55.0
 progress = 33.0
+
+[node name="Label" type="Label" parent="." unique_id=898153556]
+offset_right = 663.0
+offset_bottom = 216.0
+text = "Hi Noah"
