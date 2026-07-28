@@ -17,7 +17,8 @@ var spawn_points := [
 var score := 0
 var last_delivery_pos := Vector2.ZERO
 @onready var markers_node     = $DeliveryMarkers
-
+const TrafficCar = preload("res://traffic_car.tscn")
+const TRAFFIC_COUNT = 50
 @onready var celebration_label = $CanvasLayer/CelebrationLabel
 @onready var health_bar = $CanvasLayer/HealthBar
 @onready var camera           = $Car/Camera2D
@@ -57,7 +58,13 @@ func _on_pizza_delivered(customer_name: String) -> void:
 	shake_camera()
 	slow_mo()
 	spawn_delivery_markers()
-
+func _spawn_traffic() -> void:
+	var map_rid = NavigationServer2D.get_maps()[0]
+	for i in TRAFFIC_COUNT:
+		var car = TrafficCar.instantiate()
+		# spread initial positions across the navmesh
+		car.global_position = NavigationServer2D.map_get_random_point(map_rid, 1, false)
+		add_child(car)
 func _on_high_score_beaten() -> void:
 	Names.save_high_score()
 	celebration_label.text = "NEW HIGH SCORE!"
@@ -97,16 +104,7 @@ func trigger_win() -> void:
 	Engine.time_scale = 1.0
 #ewwdsareen.show()
 
-func _ready() -> void:
-	health_bar.max_value = Names.CAR_DATA[Names.selected_car].health
-	last_delivery_pos = $Car.global_position
 
-	_update_score_display()
-	spawn_delivery_markers()
-	var test_label = get_node("CanvasLayer/ScoreLabel")
-	print("test label: ", test_label)
-	test_label.text = "HELLO"
-	print("text set to: ", test_label.text)
 
 func spawn_delivery_markers() -> void:
 	var points = _get_spawn_positions()
@@ -125,6 +123,13 @@ func spawn_delivery_markers() -> void:
 	marker.pizza_delivered.connect(_on_pizza_delivered)
 	markers_node.add_child(marker)
 
+func _ready() -> void:
+	await get_tree().physics_frame  # wait for navigation to be ready
+	_spawn_traffic()
+	last_delivery_pos = $Car.global_position
+	_update_score_display()
+	spawn_delivery_markers()
+	
 func _process(delta: float) -> void:
 	_update_arrow()
 	_update_health_bar()

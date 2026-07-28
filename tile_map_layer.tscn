@@ -5,8 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://bmwlbuxudumyy" path="res://car.tscn" id="2_vqaso"]
 [ext_resource type="PackedScene" uid="uid://d263qmm01kkkx" path="res://cop.tscn" id="4_c3an2"]
 [ext_resource type="Texture2D" uid="uid://vejirxgmmifb" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/normal_vehiches.png" id="5_vjcy3"]
-[ext_resource type="PackedScene" uid="uid://dh1quqyymeoy4" path="res://traffic_car.tscn" id="6_bik5n"]
-[ext_resource type="PackedScene" uid="uid://cfdyt3tposyra" path="res://traffic_car_bus.tscn" id="7_xeyxs"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_xeyxs"]
 vertices = PackedVector2Array(842, -1498, 821.0625, -1498, 824, -1505, 1116, -1512, 1116, -1498, 1094, -1498, 1094, -1490, 842, -1490, 2987.2031, -2769.9453, 2970, -2769.8828, 2970, -2773.8516, 2987.1484, -2773.9375, 897, 1087, 1856, 1085, 2036, 1085, -1004.1328, 1322.9375, 114, 1089, 1073, 1085, 2032, 682, 897, 509, 2036, 502, 2808, 502, 2815, 682, -290, -2336, -976.71875, -2336, -971, -2337, 798, -1443, 806, -1462.0703, 806, -1462, 1877, 122, 2040, -455, 1865, 501, 1859, -57, 1859, -464, -64, -65, -64, -464, 109, -466, 115, 512, -64, 115, 1082, 501, -66, 509, 110, 687, -64, 684, 2815, 1082, 3050.8438, 1302.0469, -64, 1087, -848, 1089, -849, 688, -1044.1328, -1701.6719, -851, 511, 3020.1484, -662.0469, 2812, -464, 2970, -662, 1082, 122, 1068, -57, -960, -2508, -118, -2516, -116, -2326, -290, -2148, -6, -2142, 2308, -2324, 160, -2147, 897, -464, 1073, -463, 889, -658, -1634.3281, -1721.6406, -1621.3359, -1918.125, -849, -1920, -843, -653, -848, -463, 155, -1058, -6, -1053, 155, -1269, 897, 690, 1069, 682, 1856, 688, 2970, -662.3203, 1094, -662, -849, 113, -848, -64, 2278, -1654, 2306.9063, -1654, 2306, -1102, 2134, -1101, 2278, -1798, 2286, -1798, 2286, -1690, 2278, -1690, 2128.3203, -690, 2123, -690, 2123, -1654, 2154, -1654, 2154, -1690, 2146, -1690, 2146, -1798, 2154, -1798, 2278, -1834, 2154, -1834, 2123, -1834, 2123, -2143, 814, -1462, 814, -1450, 806, -1450, 806, -1414, 842, -1414, 842, -1462, 1094, -1462, 894, -1269, 2307.1953, -1834, 170, -1450, 811, -1297, 842, -1286.5391, 842, -1290, 831.75, -1290)
@@ -4710,23 +4708,10 @@ physics_layer_0/collision_layer = 8
 physics_layer_0/collision_mask = 8
 sources/0 = SubResource("TileSetAtlasSource_xeyxs")
 
-[sub_resource type="Curve2D" id="Curve2D_dn2dg"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, 45, -1123, 0, 0, 0, 0, 33, -2197, 0, 0, 0, 0, 1151, -2220, 0, 0, 0, 0, 2163, -2188, 0, 0, 0, 0, 2157, -1166, 0, 0, 0, 0, 2202, -1132, 0, 0, 0, 0, 2257, -1166, 0, 0, 0, 0, 2257, -2262, 0, 0, 0, 0, 91, -2262, 0, 0, 0, 0, 103, -1123, 0, 0, 0, 0, 63, -1089, 0, 0, 0, 0, 63, -1089, 0, 0, 0, 0, 45, -1123)
-}
-point_count = 13
-
-[sub_resource type="Curve2D" id="Curve2D_mlybm"]
-bake_interval = 512.0
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -7, -506, 0, 0, 0, 0, 945, -530, 0, 0, 0, 0, 943, -530, 0, 0, 0, 0, 943, -94, 0, 0, 0, 0, 943, 246, 0, 0, 0, 0, 946, 468, 0, 0, 0, 0, 943, 560, 0, 0, 0, 0, 176, 570, 0, 0, 0, 0, 21, 617, 0, 0, 0, 0, -22, 780, 0, 0, 0, 0, -31, 1048, 0, 0, 0, 0, -72, 1124, 0, 0, 0, 0, -872, 1124, 0, 0, 0, 0, -901, 593, 0, 0, 0, 0, -882, 138, 0, 0, 0, 0, -888, -515, 0, 0, 0, 0, -888, -515, 0, 0, 0, 0, -898, -1565, 0, 0, 0, 0, -898, -1879, 0, 0, 0, 0, -994, -1884, 0, 0, 0, 0, -1641, -1881, 0, 0, 0, 0, -1654, -1824, 0, 0, 0, 0, -1626, -1798, 0, 0, 0, 0, -1543, -1795, 0, 0, 0, 0, -990, -1795, 0, 0, 0, 0, -993, -652, 0, 0, 0, 0, -967, -571, 0, 0, 0, 0, -790, -525, 0, 0, 0, 0, -106, -522, 0, 0, 0, 0, -10, -504, 0, 0, 0, 0, -7, -506)
-}
-point_count = 31
-
 [node name="Node2D" type="Node2D" unique_id=2020518571]
 script = ExtResource("1_uuaxm")
 
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1690651433]
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1690651433 groups=["nav_region"]]
 navigation_polygon = SubResource("NavigationPolygon_xeyxs")
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="NavigationRegion2D" unique_id=235578105]
@@ -4968,35 +4953,3 @@ shape = SubResource("CapsuleShape2D_g4v7s")
 
 [node name="TileMapLayer3" type="TileMapLayer" parent="." unique_id=2024597985]
 tile_set = SubResource("TileSet_xeyxs")
-
-[node name="Paths" type="Node2D" parent="." unique_id=931813295]
-
-[node name="TrafficPath1" type="Path2D" parent="Paths" unique_id=2124906028]
-curve = SubResource("Curve2D_dn2dg")
-
-[node name="TrafficCar" parent="Paths/TrafficPath1" unique_id=1396339124 node_paths=PackedStringArray("path") instance=ExtResource("6_bik5n")]
-position = Vector2(2159, -1191)
-path = NodePath("..")
-progress = 50.0
-
-[node name="TrafficCar2" parent="Paths/TrafficPath1" unique_id=1377488878 node_paths=PackedStringArray("path") instance=ExtResource("6_bik5n")]
-position = Vector2(46, -1140)
-path = NodePath("..")
-speed = 75.0
-progress = 101.25
-
-[node name="TrafficPath2" type="Path2D" parent="Paths" unique_id=1340362145]
-curve = SubResource("Curve2D_mlybm")
-
-[node name="TrafficCar" parent="Paths/TrafficPath2" unique_id=256885829 node_paths=PackedStringArray("path") instance=ExtResource("7_xeyxs")]
-position = Vector2(-887, -469)
-collision_layer = 9
-collision_mask = 9
-path = NodePath("..")
-speed = 55.0
-progress = 33.0
-
-[node name="Label" type="Label" parent="." unique_id=898153556]
-offset_right = 663.0
-offset_bottom = 216.0
-text = "Hi Noah"
