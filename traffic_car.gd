@@ -18,10 +18,13 @@ var node_names = {
 	"fastcar": "Fastcar"
 }
 
-const MIN_ROUTE_LENGTH := 2000.0
 const SEPARATION_RADIUS := 120.0
 const SEPARATION_FORCE  := 60.0
+const SHORT_ROUTE := 400.0   # minimum short route
+const LONG_ROUTE  := 2000.0  # minimum long route
+const LONG_ROUTE_CHANCE := 0.2  # 20% chance of a long route
 
+var assigned_zone := 0
 var speed    := 120.0
 var erratic  := 0.8
 var nav: NavigationAgent2D
@@ -40,15 +43,62 @@ func _weighted_random_type() -> String:
 			return key
 	return "car"
 
+func _count_cars_in_zone(zone_index: int) -> int:
+	var count := 0
+	for car in get_tree().get_nodes_in_group("traffic"):
+		if car.assigned_zone == zone_index:
+			count += 1
+	return count
+
 func _pick_new_target() -> void:
 	var map_rid = NavigationServer2D.get_maps()[0]
+	var min_dist := SHORT_ROUTE
+	var use_long := randf() < LONG_ROUTE_CHANCE
+
+	# check if we can leave the zone
+	var cars_in_zone = _count_cars_in_zone(assigned_zone)
+	var can_leave_zone = cars_in_zone > 15
+
 	var attempts := 0
-	var point := Vector2.ZERO
-	while attempts < 10:
-		point = NavigationServer2D.map_get_random_point(map_rid, 1, false)
-		if global_position.distance_to(point) >= MIN_ROUTE_LENGTH:
-			break
-		attempts += 1
+	var point := global_position
+
+	while attempts < 20:
+		var try_point = NavigationServer2D.map_get_random_point(map_rid, 1, false)
+		if try_point == Vector2.ZERO:
+			attempts += 1
+			continue
+
+		var dist = global_position.distance_to(try_point)
+
+		# check minimum distance
+		if use_long:
+			if dist < LONG_ROUTE:
+				attempts += 1
+				continue
+		else:
+			if dist < SHORT_ROUTE:
+				attempts += 1
+				continue
+
+		# check zone constraint
+		var main = get_tree().current_scene
+		var zone_rect = main.ZONES[assigned_zone]
+		var in_zone = zone_rect.has_point(try_point)
+
+		if not can_leave_zone and not in_zone:
+			attempts += 1
+			continue
+
+		# if leaving zone, update assigned zone
+		if not in_zone:
+			for i in main.ZONES.size():
+				if main.ZONES[i].has_point(try_point):
+					assigned_zone = i
+					break
+
+		point = try_point
+		break
+
 	nav.target_position = point
 
 func _show_sprite(type: String) -> void:
@@ -75,36 +125,6 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-
-	var map_rid = NavigationServer2D.get_maps()[0]
-	var best_pos := Vector2.ZERO
-	var best_dist := 0.0
-
-	for i in 50:
-		var try_pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
-
-		if try_pos == Vector2.ZERO:
-			continue
-		if try_pos.distance_to($"../Car".global_position) < 300:
-			continue
-
-		var min_dist := INF
-		for car in get_tree().get_nodes_in_group("traffic"):
-			if car == self:
-				continue
-			min_dist = min(min_dist, try_pos.distance_to(car.global_position))
-		if min_dist == INF:
-			min_dist = 9999.0
-		if min_dist > best_dist:
-			best_dist = min_dist
-			best_pos = try_pos
-
-	if best_pos == Vector2.ZERO:
-		await get_tree().physics_frame
-		await get_tree().physics_frame
-		best_pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
-
-	global_position = best_pos
 
 	var picked = _weighted_random_type()
 	speed   = CAR_TYPES[picked].speed

@@ -13,7 +13,15 @@ var spawn_points := [
 	Vector2(-200, -200),
 	Vector2(500, -100),
 ]
-
+const ZONES = [
+	Rect2(-2000, -2000, 1000, 1000),  # zone 0 — adjust these to your map
+	Rect2(-1000, -2000, 1000, 1000),  # zone 1
+	Rect2(0,     -2000, 1000, 1000),  # zone 2
+	Rect2(-2000, -1000, 1000, 1000),  # zone 3
+	Rect2(-1000, -1000, 1000, 1000),  # zone 4
+]
+const CARS_PER_ZONE := 20
+const MIN_CARS_PER_ZONE := 15
 var score := 0
 var last_delivery_pos := Vector2.ZERO
 @onready var markers_node     = $DeliveryMarkers
@@ -59,10 +67,28 @@ func _on_pizza_delivered(customer_name: String) -> void:
 	slow_mo()
 	spawn_delivery_markers()
 func _spawn_traffic() -> void:
-	for i in TRAFFIC_COUNT:
-		await get_tree().create_timer(0.1).timeout
-		var car = TrafficCar.instantiate()
-		add_child(car)
+	for zone_index in ZONES.size():
+		var spawned := 0
+		var attempts := 0
+		while spawned < CARS_PER_ZONE and attempts < 200:
+			attempts += 1
+			var map_rid = NavigationServer2D.get_maps()[0]
+			var try_pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
+			
+			# check it's in the right zone
+			if not ZONES[zone_index].has_point(try_pos):
+				continue
+			
+			# check it's not too close to player
+			if try_pos.distance_to($Car.global_position) < 300:
+				continue
+			
+			var car = TrafficCar.instantiate()
+			car.global_position = try_pos
+			car.assigned_zone = zone_index
+			add_child(car)
+			await get_tree().create_timer(0.05).timeout
+			spawned += 1
 func _on_high_score_beaten() -> void:
 	Names.save_high_score()
 	celebration_label.text = "NEW HIGH SCORE!"
