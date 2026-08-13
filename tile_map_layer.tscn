@@ -5076,3 +5076,25 @@ sprite_frames = SubResource("SpriteFrames_g4v7s")
 shape = SubResource("CapsuleShape2D_g4v7s")
 
 [node name="Zones" type="Node2D" parent="." unique_id=1577018020]
+
+[node name="CityEast" type="Polygon2D" parent="Zones" unique_id=192922079]
+position = Vector2(43.095, 0)
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(939.905, 190, 935.905, 1252, 2961.905, 1262, 2931.905, 88, 933.905, 110)
+
+[node name="CityWest" type="Polygon2D" parent="Zones" unique_id=1000360236]
+position = Vector2(43.095, 0)
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(932.905, 174, 935.905, 1252, -1051.095, 1276, -1049.095, 121, 928.905, 114)
+
+[node name="CityNorth" type="Polygon2D" parent="Zones" unique_id=1555852536]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(-1045, -640, -1017, 127, 2994, 94, 2977, -702)
+
+[node name="Farm" type="Polygon2D" parent="Zones" unique_id=2006934934]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(-854, -663, -831, -2062, -1477, -2088, -1463, -2788, 2970, -2788, 2977, -702)
+
+[node name="Port" type="Polygon2D" parent="Zones" unique_id=1861035136]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(-829, -641, -831, -2062, -1477, -2088, -1463, -2788, -3291, -2822, -3297, -481, -1945, -494, -1936, -1686, -1402, -641)

@@ -1,5 +1,5 @@
 extends CharacterBody2D
-
+const MIN_CARS_PER_ZONE := 15
 const CAR_TYPES = {
 	"bus":     { "speed": 60.0,  "erratic": 0.2, "weight": 5  },
 	"truck":   { "speed": 70.0,  "erratic": 0.3, "weight": 8  },
@@ -20,9 +20,9 @@ var node_names = {
 
 const SEPARATION_RADIUS := 120.0
 const SEPARATION_FORCE  := 60.0
-const SHORT_ROUTE := 400.0   # minimum short route
-const LONG_ROUTE  := 2000.0  # minimum long route
-const LONG_ROUTE_CHANCE := 0.2  # 20% chance of a long route
+const SHORT_ROUTE       := 400.0
+const LONG_ROUTE        := 2000.0
+const LONG_ROUTE_CHANCE := 0.2
 
 var assigned_zone := 0
 var speed    := 120.0
@@ -50,55 +50,64 @@ func _count_cars_in_zone(zone_index: int) -> int:
 			count += 1
 	return count
 
-func _pick_new_target() -> void:
+
+
+func _pick_random_point_in_zone(zone_index: int) -> Vector2:
+	var main = get_tree().current_scene
+	var poly = main.zone_polygons[zone_index]
 	var map_rid = NavigationServer2D.get_maps()[0]
-	var min_dist := SHORT_ROUTE
+	
+	# get bounding box of zone polygon
+	var points = poly.polygon
+	var min_x = points[0].x
+	var max_x = points[0].x
+	var min_y = points[0].y
+	var max_y = points[0].y
+	for p in points:
+		min_x = min(min_x, p.x)
+		max_x = max(max_x, p.x)
+		min_y = min(min_y, p.y)
+		max_y = max(max_y, p.y)
+	
+	# try random points within bounding box
+	for i in 30:
+		var try_pos = poly.global_position + Vector2(
+			randf_range(min_x, max_x),
+			randf_range(min_y, max_y)
+		)
+		# check it's inside the polygon
+		if not main._point_in_zone(try_pos, zone_index):
+			continue
+		# snap to navmesh
+		var snapped = NavigationServer2D.map_get_closest_point(map_rid, try_pos)
+		# check snap didn't jump too far off road
+		if snapped.distance_to(try_pos) > 200:
+			continue
+		return snapped
+	
+	# fallback to navmesh random if all attempts fail
+	return NavigationServer2D.map_get_random_point(map_rid, 1, false)
+
+func _pick_new_target() -> void:
 	var use_long := randf() < LONG_ROUTE_CHANCE
-
-	# check if we can leave the zone
 	var cars_in_zone = _count_cars_in_zone(assigned_zone)
-	var can_leave_zone = cars_in_zone > 15
+	var can_leave_zone = cars_in_zone > MIN_CARS_PER_ZONE
+	var main = get_tree().current_scene
 
-	var attempts := 0
-	var point := global_position
+	# decide target zone
+	var target_zone := assigned_zone
+	if can_leave_zone and randf() < 0.1:
+		# 10% chance to try moving to adjacent zone
+		target_zone = randi() % main.zone_polygons.size()
 
-	while attempts < 20:
-		var try_point = NavigationServer2D.map_get_random_point(map_rid, 1, false)
-		if try_point == Vector2.ZERO:
-			attempts += 1
-			continue
-
-		var dist = global_position.distance_to(try_point)
-
-		# check minimum distance
-		if use_long:
-			if dist < LONG_ROUTE:
-				attempts += 1
-				continue
-		else:
-			if dist < SHORT_ROUTE:
-				attempts += 1
-				continue
-
-		# check zone constraint
-		var main = get_tree().current_scene
-		var zone_rect = main.ZONES[assigned_zone]
-		var in_zone = zone_rect.has_point(try_point)
-
-		if not can_leave_zone and not in_zone:
-			attempts += 1
-			continue
-
-		# if leaving zone, update assigned zone
-		if not in_zone:
-			for i in main.ZONES.size():
-				if main.ZONES[i].has_point(try_point):
-					assigned_zone = i
-					break
-
-		point = try_point
-		break
-
+	var point := _pick_random_point_in_zone(target_zone)
+	
+	# enforce minimum distance
+	var min_dist = LONG_ROUTE if use_long else SHORT_ROUTE
+	if global_position.distance_to(point) < min_dist:
+		point = _pick_random_point_in_zone(target_zone)
+	
+	assigned_zone = target_zone
 	nav.target_position = point
 
 func _show_sprite(type: String) -> void:
