@@ -1,9 +1,16 @@
 extends CharacterBody2D
+
 var damage_cooldown := 0.0
 const DAMAGE_COOLDOWN_TIME := 1.5
 const Pizza = preload("res://pizza.tscn")
 var health := 100
 var MAX_HEALTH := 100
+var rocket_count := 0
+var boosting := false
+const BOOST_SPEED := 600.0
+const BOOST_DURATION := 5.0
+var base_max_speed := 0.0
+
 @export var ACCELERATION : float = 600.0
 @export var MAX_SPEED    : float = 400.0
 @export var FRICTION     : float = 4.0
@@ -18,6 +25,7 @@ func _ready() -> void:
 	MAX_HEALTH   = car_data.health
 	health       = MAX_HEALTH
 	MAX_SPEED    = car_data.speed * 48.0 + 120.0
+	base_max_speed = MAX_SPEED
 	ACCELERATION = car_data.acceleration * 70.0 + 120.0
 	FRICTION     = 3.0 - (car_data.handling * 0.2)
 	var d = car_data.drift / 5.0
@@ -27,6 +35,28 @@ func _ready() -> void:
 	$CarSprite1.visible = Names.selected_car == 0
 	$CarSprite2.visible = Names.selected_car == 1
 	$CarSprite3.visible = Names.selected_car == 2
+
+func collect_rocket() -> void:
+	rocket_count += 1
+	get_tree().current_scene._update_rocket_display()
+
+func _use_rocket() -> void:
+	if rocket_count <= 0 or boosting:
+		return
+	rocket_count -= 1
+	boosting = true
+	MAX_SPEED = BOOST_SPEED
+	ACCELERATION = 900.0
+	get_tree().current_scene._update_rocket_display()
+	_spawn_fire()
+	await get_tree().create_timer(BOOST_DURATION).timeout
+	MAX_SPEED = base_max_speed
+	ACCELERATION = Names.CAR_DATA[Names.selected_car].acceleration * 70.0 + 120.0
+	boosting = false
+	$FireParticles.emitting = false
+
+func _spawn_fire() -> void:
+	$FireParticles.emitting = true
 
 func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_axis("brake", "accelerate")
@@ -62,6 +92,9 @@ func _physics_process(delta: float) -> void:
 
 	if input_dir == 0:
 		velocity = velocity.lerp(Vector2.ZERO, FRICTION * delta)
+
+	if Input.is_action_just_pressed("use_rocket") and not boosting:
+		_use_rocket()
 
 	move_and_slide()
 

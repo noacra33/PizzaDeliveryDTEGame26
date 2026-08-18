@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://6jco47dsvidy" path="res://Fast Fury Assets/Fast Fury Assets/tileset.png" id="1_0ugm7"]
 [ext_resource type="Script" uid="uid://blkfjr62qxv2m" path="res://main.gd" id="1_uuaxm"]
 [ext_resource type="PackedScene" uid="uid://bmwlbuxudumyy" path="res://car.tscn" id="2_vqaso"]
+[ext_resource type="Texture2D" uid="uid://c5n5kkt8xn5l6" path="res://Sprites/New Piskel (15) (1).png" id="4_bik5n"]
 [ext_resource type="PackedScene" uid="uid://d263qmm01kkkx" path="res://cop.tscn" id="4_c3an2"]
 [ext_resource type="Texture2D" uid="uid://vejirxgmmifb" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/normal_vehiches.png" id="5_vjcy3"]
 
@@ -4989,6 +4990,18 @@ offset_bottom = 237.0
 theme_override_colors/font_color = Color(1, 0.75, 0, 1)
 theme_override_font_sizes/font_size = 100
 horizontal_alignment = 1
+
+[node name="RocketContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1371721406]
+offset_left = 1050.0
+offset_top = 15.0
+offset_right = 1051.0
+offset_bottom = 55.0
+
+[node name="RocketCount" type="Label" parent="CanvasLayer/RocketContainer" unique_id=440689965]
+layout_mode = 2
+
+[node name="RocketIcon" type="Sprite2D" parent="CanvasLayer/RocketContainer" unique_id=1105250160]
+texture = ExtResource("4_bik5n")
 
 [node name="DeliveryMarkers" type="Node2D" parent="." unique_id=1584698029]
 

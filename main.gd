@@ -14,6 +14,8 @@ var last_delivery_pos := Vector2.ZERO
 const CARS_PER_ZONE := 20
 const MIN_CARS_PER_ZONE := 15
 const TrafficCar = preload("res://traffic_car.tscn")
+const RocketPickup = preload("res://rocket_pickup.tscn")
+const ROCKET_SPAWN_COUNT := 5
 
 var zone_polygons: Array = []
 
@@ -27,6 +29,8 @@ var zone_polygons: Array = []
 @onready var distance_label    = $CanvasLayer/DistanceLabel
 @onready var spawn_points_node = $SpawnPoints
 @onready var customer_label    = $CanvasLayer/CustomerLabel
+@onready var rocket_count_label = $CanvasLayer/RocketContainer/RocketCount
+@onready var rocket_icon        = $CanvasLayer/RocketContainer/RocketIcon
 
 func _build_zones() -> void:
 	print("building zones, children: ", $Zones.get_children())
@@ -44,6 +48,20 @@ func _get_spawn_positions() -> Array:
 	for child in spawn_points_node.get_children():
 		positions.append(child.global_position)
 	return positions
+
+func _spawn_rockets() -> void:
+	var map_rid = NavigationServer2D.get_maps()[0]
+	for i in ROCKET_SPAWN_COUNT:
+		var rocket = RocketPickup.instantiate()
+		var pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
+		rocket.global_position = pos
+		add_child(rocket)
+
+func _update_rocket_display() -> void:
+	var count = $Car.rocket_count
+	rocket_count_label.text = "x%d" % count
+	rocket_icon.visible = count > 0
+	rocket_count_label.visible = count > 0
 
 func _update_score_display() -> void:
 	score_label.text      = "SCORE: %d" % score
@@ -155,8 +173,10 @@ func _ready() -> void:
 	_spawn_traffic()
 	last_delivery_pos = $Car.global_position
 	_update_score_display()
+	_update_rocket_display()
 	spawn_delivery_markers()
 	_start_zone_debug()
+	_spawn_rockets()
 
 func _start_zone_debug() -> void:
 	while true:
