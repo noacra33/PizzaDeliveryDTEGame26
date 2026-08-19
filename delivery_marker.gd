@@ -1,17 +1,24 @@
 extends Area2D
 
-signal pizza_delivered(customer_name: String)
-@onready var marker  = $Circle
-@onready var marker2 = $Circle2
+signal pizza_delivered(customer_name: String, travel_time: float)
+
 var player_inside := false
 var waiting_for_pizza := false
 var customer_name := ""
 var car_ref: Node = null
+var time_started := 0.0
+
+const SPIN_SPEED := 1.5
 
 func _ready() -> void:
 	customer_name = Names.random_name()
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+	time_started = Time.get_ticks_msec() / 1000.0
+
+func _process(delta: float) -> void:
+	$Circle.rotation += SPIN_SPEED * delta
+	$Circle2.rotation -= SPIN_SPEED * delta
 
 func _on_body_entered(body: Node) -> void:
 	if body.name == "Car":
@@ -28,22 +35,6 @@ func _on_body_exited(body: Node) -> void:
 func receive_pizza() -> void:
 	if waiting_for_pizza:
 		waiting_for_pizza = false
-		pizza_delivered.emit(customer_name)
+		var travel_time = (Time.get_ticks_msec() / 1000.0) - time_started
+		pizza_delivered.emit(customer_name, travel_time)
 		queue_free()
-
-func _calculate_points(distance: float) -> int:
-	# closer throw = fewer points, farther = more
-	# max useful throw range is about 300px
-	if distance < 50:
-		return 100
-	elif distance < 150:
-		return 250
-	elif distance < 300:
-		return 500
-	else:
-		return 1000
-		
-func _process(delta):
-	marker.rotation_degrees +=400 * delta
-	marker2.rotation_degrees -=350 * delta
-	

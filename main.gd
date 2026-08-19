@@ -10,6 +10,8 @@ var high_score_beaten := false
 
 var score := 0
 var last_delivery_pos := Vector2.ZERO
+var total_stars := 0
+var star_deliveries := 0
 
 const CARS_PER_ZONE := 20
 const MIN_CARS_PER_ZONE := 15
@@ -17,26 +19,37 @@ const TrafficCar = preload("res://traffic_car.tscn")
 const RocketPickup = preload("res://rocket_pickup.tscn")
 const ROCKET_SPAWN_COUNT := 5
 
+# scoring constants
+const DIST_SCALE        := 0.4    # points per pixel of distance
+const MAX_DIST_POINTS   := 800    # cap on distance points
+const MIN_DIST_POINTS   := 50     # minimum so short trips still score
+const TIME_BONUS_3STAR  := 750
+const TIME_BONUS_2STAR  := 250
+const TIME_BONUS_1STAR  := 100
+# time multipliers — distance / these = time limit in seconds
+const TIME_3STAR_DIV    := 250.0  # very tight — you need to haul
+const TIME_2STAR_DIV    := 120.0  # moderate — solid driving needed
+const TIME_1STAR_DIV    := 60.0  # generous — just don't dawdle
+
 var zone_polygons: Array = []
 
-@onready var markers_node      = $DeliveryMarkers
-@onready var celebration_label = $CanvasLayer/CelebrationLabel
-@onready var health_bar        = $CanvasLayer/HealthBar
-@onready var camera            = $Car/Camera2D
-@onready var score_label       = $CanvasLayer/ScoreLabel
-@onready var high_score_label  = $CanvasLayer/HighScoreLabel
-@onready var delivery_arrow    = $Car/DeliveryArrow
-@onready var distance_label    = $CanvasLayer/DistanceLabel
-@onready var spawn_points_node = $SpawnPoints
-@onready var customer_label    = $CanvasLayer/CustomerLabel
-@onready var rocket_count_label = $CanvasLayer/RocketContainer/RocketCount
-@onready var rocket_icon        = $CanvasLayer/RocketContainer/RocketIcon
+@onready var markers_node       = $DeliveryMarkers
+@onready var celebration_label  = $CanvasLayer/CelebrationLabel
+@onready var health_bar         = $CanvasLayer/HealthBar
+@onready var camera             = $Car/Camera2D
+@onready var score_label        = $CanvasLayer/ScoreLabel
+@onready var high_score_label   = $CanvasLayer/HighScoreLabel
+@onready var delivery_arrow     = $Car/DeliveryArrow
+@onready var distance_label     = $CanvasLayer/DistanceLabel
+@onready var spawn_points_node  = $SpawnPoints
+@onready var customer_label     = $CanvasLayer/CustomerLabel
+@onready var rocket_label       = $CanvasLayer/RocketLabel
+@onready var star_label         = $CanvasLayer/StarLabel
+@onready var avg_star_label     = $CanvasLayer/AvgStarLabel
 
 func _build_zones() -> void:
-	print("building zones, children: ", $Zones.get_children())
 	for zone_node in $Zones.get_children():
 		zone_polygons.append(zone_node)
-	print("zones built: ", zone_polygons.size())
 
 func _point_in_zone(point: Vector2, zone_index: int) -> bool:
 	var poly = zone_polygons[zone_index]
@@ -59,24 +72,92 @@ func _spawn_rockets() -> void:
 
 func _update_rocket_display() -> void:
 	var count = $Car.rocket_count
-	rocket_count_label.text = "x%d" % count
-	rocket_icon.visible = count > 0
-	rocket_count_label.visible = count > 0
+	rocket_label.text = "🚀 x%d" % count
+	rocket_label.visible = count > 0
 
 func _update_score_display() -> void:
 	score_label.text      = "SCORE: %d" % score
 	high_score_label.text = "BEST: %d" % Names.high_score
 
-func _on_pizza_delivered(customer_name: String) -> void:
+func _update_avg_star() -> void:
+	if star_deliveries == 0:
+		avg_star_label.text = ""
+		return
+	var avg = float(total_stars) / float(star_deliveries)
+	var stars = ""
+	var rounded = int(round(avg))
+	for i in 3:
+		stars += "★" if i < rounded else "☆"
+	avg_star_label.text = "AVG: %s (%.1f)" % [stars, avg]
+
+func _calculate_score(distance: float, travel_time: float) -> Dictionary:
+	var car_speed = $Car.MAX_SPEED
+	var speed_factor = car_speed / 264.0  # 264 is slowest car's max speed, so factor >= 1.0
+
+	var dist_points = clamp(int(distance * DIST_SCALE), MIN_DIST_POINTS, MAX_DIST_POINTS)
+
+	var time_3star = (distance / TIME_3STAR_DIV) / speed_factor
+	var time_2star = (distance / TIME_2STAR_DIV) / speed_factor
+	var time_1star = (distance / TIME_1STAR_DIV) / speed_factor
+
+	var time_bonus := 0
+	var stars := 0
+	if travel_time <= time_3star:
+		time_bonus = TIME_BONUS_3STAR
+		stars = 3
+	elif travel_time <= time_2star:
+		time_bonus = TIME_BONUS_2STAR
+		stars = 2
+	elif travel_time <= time_1star:
+		time_bonus = TIME_BONUS_1STAR
+		stars = 1
+	else:
+		stars = 0
+
+	return {
+		"dist_points": dist_points,
+		"time_bonus": time_bonus,
+		"total": dist_points + time_bonus,
+		"stars": stars
+	}
+
+func _flash_star_label(stars: int, dist_points: int, time_bonus: int) -> void:
+	var star_str = ""
+	for i in 3:
+		star_str += "★" if i < stars else "☆"
+	
+	if stars == 0:
+		star_label.text = "☆☆☆ NO BONUS\n+%d pts" % dist_points
+		star_label.modulate = Color(0.6, 0.6, 0.6, 1)
+	elif stars == 1:
+		star_label.text = "%s GOOD\n+%d +%d pts" % [star_str, dist_points, time_bonus]
+		star_label.modulate = Color(1, 0.8, 0.2, 1)
+	elif stars == 2:
+		star_label.text = "%s GREAT\n+%d +%d pts" % [star_str, dist_points, time_bonus]
+		star_label.modulate = Color(1, 0.6, 0, 1)
+	else:
+		star_label.text = "%s PERFECT!\n+%d +%d pts" % [star_str, dist_points, time_bonus]
+		star_label.modulate = Color(1, 1, 0, 1)
+
+	star_label.modulate.a = 1.0
+	var tween = create_tween()
+	tween.tween_interval(1.5)
+	tween.tween_property(star_label, "modulate:a", 0.0, 0.8)
+
+func _on_pizza_delivered(customer_name: String, travel_time: float) -> void:
 	deliveries_done += 1
 
 	var current_pos = markers_node.get_children()[0].global_position if markers_node.get_children().size() > 0 else Vector2.ZERO
 	var distance = last_delivery_pos.distance_to(current_pos)
 	last_delivery_pos = current_pos
 
-	var points = min(1000, int(distance))
-	score += points
+	var result = _calculate_score(distance, travel_time)
+	score += result.total
+	total_stars += result.stars
+	star_deliveries += 1
 
+	_flash_star_label(result.stars, result.dist_points, result.time_bonus)
+	_update_avg_star()
 	_check_cop_spawn()
 
 	var is_new_high = Names.update_high_score(score)
@@ -91,41 +172,30 @@ func _on_pizza_delivered(customer_name: String) -> void:
 
 func _spawn_traffic() -> void:
 	var map_rid = NavigationServer2D.get_maps()[0]
-	var test_pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
-	print("test navmesh point: ", test_pos)
-	for i in zone_polygons.size():
-		var poly = zone_polygons[i]
-		print("zone ", i, " name: ", poly.name)
-		print("zone ", i, " contains test point: ", _point_in_zone(test_pos, i))
-
 	for zone_index in zone_polygons.size():
 		var spawned := 0
 		var attempts := 0
 		while spawned < CARS_PER_ZONE and attempts < 200:
 			attempts += 1
 			var try_pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
-
 			if try_pos == Vector2.ZERO:
 				continue
 			if not _point_in_zone(try_pos, zone_index):
 				continue
 			if try_pos.distance_to($Car.global_position) < 300:
 				continue
-
 			var car = TrafficCar.instantiate()
 			car.global_position = try_pos
 			car.assigned_zone = zone_index
 			add_child(car)
 			await get_tree().create_timer(0.05).timeout
 			spawned += 1
-		print("zone ", zone_index, " spawned: ", spawned, " after ", attempts, " attempts")
 
 func _on_high_score_beaten() -> void:
 	Names.save_high_score()
 	celebration_label.text = "NEW HIGH SCORE!"
 	celebration_label.modulate = Color(1, 1, 0, 1)
 	var original_pos = celebration_label.position
-
 	var tween = create_tween()
 	for i in 8:
 		tween.tween_callback(func():
@@ -158,10 +228,8 @@ func spawn_delivery_markers() -> void:
 			available.append(i)
 	available.shuffle()
 	last_spawn_index = available[0]
-
 	for child in markers_node.get_children():
 		child.queue_free()
-
 	var marker = DeliveryMarker.instantiate()
 	marker.global_position = points[available[0]]
 	marker.pizza_delivered.connect(_on_pizza_delivered)
@@ -198,10 +266,8 @@ func _update_arrow() -> void:
 		distance_label.text = ""
 		customer_label.text = ""
 		return
-
 	var marker = markers[0]
 	delivery_arrow.target = marker
-
 	var distance = $Car.global_position.distance_to(marker.global_position)
 	distance_label.text = "NEXT: %dm" % int(distance / 10)
 	customer_label.text = "DELIVER TO: %s" % marker.customer_name
