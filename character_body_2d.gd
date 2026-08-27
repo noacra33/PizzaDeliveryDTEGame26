@@ -11,6 +11,9 @@ const BOOST_SPEED := 600.0
 const BOOST_DURATION := 5.0
 var base_max_speed := 0.0
 
+@onready var music1 = $Music1
+@onready var music2 = $Music2
+
 @export var ACCELERATION : float = 600.0
 @export var MAX_SPEED    : float = 400.0
 @export var FRICTION     : float = 4.0
@@ -35,10 +38,26 @@ func _ready() -> void:
 	$CarSprite1.visible = Names.selected_car == 0
 	$CarSprite2.visible = Names.selected_car == 1
 	$CarSprite3.visible = Names.selected_car == 2
+	_start_music()
+
+func _start_music() -> void:
+	var track = music1 if randi() % 2 == 0 else music2
+	track.play()
+	track.finished.connect(func(): _play_other(track))
+
+func _play_other(last_track: AudioStreamPlayer2D) -> void:
+	var next = music2 if last_track == music1 else music1
+	next.play()
+	next.finished.connect(func(): _play_other(next))
 
 func collect_rocket() -> void:
 	rocket_count += 1
 	get_tree().current_scene._update_rocket_display()
+
+func collect_health() -> void:
+	var car_data = Names.CAR_DATA[Names.selected_car]
+	var heal_amount = int(car_data.health * 0.3)
+	health = min(health + heal_amount, MAX_HEALTH)
 
 func _use_rocket() -> void:
 	if rocket_count <= 0 or boosting:
@@ -104,6 +123,7 @@ func take_damage(amount: int) -> void:
 	damage_cooldown = DAMAGE_COOLDOWN_TIME
 	health -= amount
 	health = max(health, 0)
+	get_tree().current_scene.flash_damage()
 	if health <= 0:
 		die()
 

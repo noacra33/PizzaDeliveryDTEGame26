@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://coggjtw6kpv3y" path="res://start_screen.gd" id="1_ncxyx"]
 [ext_resource type="Texture2D" uid="uid://ce422ofj7klpi" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_red.png" id="2_k1na2"]
+[ext_resource type="FontFile" uid="uid://c1jbwreb3y4l1" path="res://Sprites/pixelmix.ttf" id="2_vdywr"]
 [ext_resource type="Texture2D" uid="uid://c6ifqvn1d2urs" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_purple_dark.png" id="3_vdywr"]
 [ext_resource type="Texture2D" uid="uid://ev1b5fc2o18p" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_purple.png" id="4_cdgt5"]
 
@@ -15,7 +16,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_l67vj")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -30,7 +31,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_udyin")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -45,7 +46,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k1na2")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -71,6 +72,7 @@ offset_left = 92.0
 offset_top = 2.0
 offset_right = 1065.0
 offset_bottom = 243.0
+theme_override_fonts/font = ExtResource("2_vdywr")
 theme_override_font_sizes/font_size = 145
 text = "Pizza Game"
 horizontal_alignment = 1
@@ -81,6 +83,7 @@ offset_left = 546.0
 offset_top = 530.0
 offset_right = 908.0
 offset_bottom = 628.0
+theme_override_fonts/font = ExtResource("2_vdywr")
 theme_override_font_sizes/font_size = 65
 text = "Start Game"
 
@@ -90,6 +93,7 @@ offset_left = 61.0
 offset_top = 535.0
 offset_right = 500.0
 offset_bottom = 669.0
+theme_override_fonts/font = ExtResource("2_vdywr")
 theme_override_font_sizes/font_size = 62
 text = "Test"
 horizontal_alignment = 1
@@ -114,18 +118,23 @@ layout_mode = 2
 
 [node name="SpeedLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=1585876816]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="AccelLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=2140177336]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="HandlingLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=351333750]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="HealthLabel1" type="Label" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=237882016]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="SelectButton1" type="Button" parent="CarContainer/CarPanel1/VBoxContainer" unique_id=369479446]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 text = "Select"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel1" unique_id=868522002]
@@ -144,18 +153,23 @@ layout_mode = 2
 
 [node name="SpeedLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=1969722772]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="AccelLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=2033978001]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="HandlingLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=1903968405]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="HealthLabel2" type="Label" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=832691267]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="SelectButton2" type="Button" parent="CarContainer/CarPanel2/VBoxContainer" unique_id=930485943]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 text = "Select"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel2" unique_id=955972168]
@@ -174,18 +188,23 @@ layout_mode = 2
 
 [node name="SpeedLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=260396813]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="AccelLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=1881495064]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="HandlingLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=1936515083]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="HealthLabel3" type="Label" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=238598352]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 
 [node name="SelectButton3" type="Button" parent="CarContainer/CarPanel3/VBoxContainer" unique_id=584539777]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_vdywr")
 text = "Select"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CarContainer/CarPanel3" unique_id=532911960]

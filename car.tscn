@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://drtdc84jeinu6" path="res://New Piskel (12).png" id="4_td361"]
 [ext_resource type="Texture2D" uid="uid://hevr6prntm3w" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_blue_dark.png" id="5_72krn"]
 [ext_resource type="Texture2D" uid="uid://ev1b5fc2o18p" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/Racing Cars/racing_cars_purple.png" id="6_v0hk8"]
+[ext_resource type="AudioStream" uid="uid://b7ordvx1nnxbi" path="res://Sprites/Pizza Rush.mp3" id="7_mjudg"]
+[ext_resource type="AudioStream" uid="uid://b46cyf48xctjg" path="res://Sprites/Untitled (1).mp3" id="8_lpol0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_72krn"]
 atlas = ExtResource("2_k61xc")
@@ -106,3 +108,9 @@ emitting = false
 amount = 80
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_g4v7s")
+
+[node name="Music1" type="AudioStreamPlayer2D" parent="." unique_id=1916003401]
+stream = ExtResource("7_mjudg")
+
+[node name="Music2" type="AudioStreamPlayer2D" parent="." unique_id=338693702]
+stream = ExtResource("8_lpol0")

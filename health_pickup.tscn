@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bey8i5lk1cmc1"]
+
+[ext_resource type="Script" uid="uid://dtr8y4i6rsg00" path="res://health_pickup.gd" id="1_awyve"]
+[ext_resource type="Texture2D" uid="uid://dnds75pkmv5eo" path="res://Sprites/New Piskel (16).png" id="2_xl6eh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jk1s8"]
+atlas = ExtResource("2_xl6eh")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jk1s8")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
+size = Vector2(25, 26)
+
+[node name="HealthPickup" type="Area2D" unique_id=878980557]
+script = ExtResource("1_awyve")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1643097556]
+position = Vector2(1, 4)
+sprite_frames = SubResource("SpriteFrames_g4v7s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1078884949]
+position = Vector2(-0.5, 3)
+shape = SubResource("RectangleShape2D_yf5fn")

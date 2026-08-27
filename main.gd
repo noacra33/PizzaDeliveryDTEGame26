@@ -17,40 +17,47 @@ const CARS_PER_ZONE := 20
 const MIN_CARS_PER_ZONE := 15
 const TrafficCar = preload("res://traffic_car.tscn")
 const RocketPickup = preload("res://rocket_pickup.tscn")
+const HealthPickup = preload("res://health_pickup.tscn")
 const ROCKET_SPAWN_COUNT := 5
+const HEALTH_SPAWN_COUNT := 4
 
-# scoring constants
-const DIST_SCALE        := 0.4    # points per pixel of distance
-const MAX_DIST_POINTS   := 800    # cap on distance points
-const MIN_DIST_POINTS   := 50     # minimum so short trips still score
+const DIST_SCALE        := 0.4
+const MAX_DIST_POINTS   := 800
+const MIN_DIST_POINTS   := 50
 const TIME_BONUS_3STAR  := 750
 const TIME_BONUS_2STAR  := 250
 const TIME_BONUS_1STAR  := 100
-# time multipliers — distance / these = time limit in seconds
-const TIME_3STAR_DIV    := 250.0  # very tight — you need to haul
-const TIME_2STAR_DIV    := 120.0  # moderate — solid driving needed
-const TIME_1STAR_DIV    := 60.0  # generous — just don't dawdle
+const TIME_3STAR_DIV    := 190
+const TIME_2STAR_DIV    := 150
+const TIME_1STAR_DIV    := 100
 
 var zone_polygons: Array = []
-
-@onready var markers_node       = $DeliveryMarkers
-@onready var celebration_label  = $CanvasLayer/CelebrationLabel
-@onready var health_bar         = $CanvasLayer/HealthBar
-@onready var camera             = $Car/Camera2D
-@onready var score_label        = $CanvasLayer/ScoreLabel
-@onready var high_score_label   = $CanvasLayer/HighScoreLabel
-@onready var delivery_arrow     = $Car/DeliveryArrow
-@onready var distance_label     = $CanvasLayer/DistanceLabel
-@onready var spawn_points_node  = $SpawnPoints
-@onready var customer_label     = $CanvasLayer/CustomerLabel
-@onready var rocket_label       = $CanvasLayer/RocketLabel
-@onready var star_label         = $CanvasLayer/StarLabel
-@onready var avg_star_label     = $CanvasLayer/AvgStarLabel
+var cops_enabled := false
+@onready var damage_flash = $CanvasLayer/DamageFlash
+@onready var markers_node      = $DeliveryMarkers
+@onready var celebration_label = $CanvasLayer/CelebrationLabel
+@onready var health_bar        = $CanvasLayer/HealthBar
+@onready var camera            = $Car/Camera2D
+@onready var score_label       = $CanvasLayer/ScoreLabel
+@onready var high_score_label  = $CanvasLayer/HighScoreLabel
+@onready var delivery_arrow    = $Car/DeliveryArrow
+@onready var distance_label    = $CanvasLayer/DistanceLabel
+@onready var spawn_points_node = $SpawnPoints
+@onready var customer_label    = $CanvasLayer/CustomerLabel
+@onready var rocket_label      = $CanvasLayer/RocketLabel
+@onready var star_label        = $CanvasLayer/StarLabel
+@onready var avg_star_label    = $CanvasLayer/AvgStarLabel
+@onready var cop_warning_label = $CanvasLayer/CopWarningLabel
 
 func _build_zones() -> void:
 	for zone_node in $Zones.get_children():
 		zone_polygons.append(zone_node)
-
+func flash_damage() -> void:
+	damage_flash.visible = true
+	damage_flash.modulate.a = 0.5
+	var tween = create_tween()
+	tween.tween_property(damage_flash, "modulate:a", 0.0, 0.4)
+	tween.tween_callback(func(): damage_flash.visible = false)
 func _point_in_zone(point: Vector2, zone_index: int) -> bool:
 	var poly = zone_polygons[zone_index]
 	var local_point = poly.to_local(point)
@@ -69,6 +76,14 @@ func _spawn_rockets() -> void:
 		var pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
 		rocket.global_position = pos
 		add_child(rocket)
+
+func _spawn_health_pickups() -> void:
+	var map_rid = NavigationServer2D.get_maps()[0]
+	for i in HEALTH_SPAWN_COUNT:
+		var pickup = HealthPickup.instantiate()
+		var pos = NavigationServer2D.map_get_random_point(map_rid, 1, false)
+		pickup.global_position = pos
+		add_child(pickup)
 
 func _update_rocket_display() -> void:
 	var count = $Car.rocket_count
@@ -92,7 +107,7 @@ func _update_avg_star() -> void:
 
 func _calculate_score(distance: float, travel_time: float) -> Dictionary:
 	var car_speed = $Car.MAX_SPEED
-	var speed_factor = car_speed / 264.0  # 264 is slowest car's max speed, so factor >= 1.0
+	var speed_factor = car_speed / 264.0
 
 	var dist_points = clamp(int(distance * DIST_SCALE), MIN_DIST_POINTS, MAX_DIST_POINTS)
 
@@ -125,7 +140,7 @@ func _flash_star_label(stars: int, dist_points: int, time_bonus: int) -> void:
 	var star_str = ""
 	for i in 3:
 		star_str += "★" if i < stars else "☆"
-	
+
 	if stars == 0:
 		star_label.text = "☆☆☆ NO BONUS\n+%d pts" % dist_points
 		star_label.modulate = Color(0.6, 0.6, 0.6, 1)
@@ -236,6 +251,8 @@ func spawn_delivery_markers() -> void:
 	markers_node.add_child(marker)
 
 func _ready() -> void:
+	damage_flash.modulate.a = 0.0
+	damage_flash.visible = false
 	_build_zones()
 	await get_tree().create_timer(0.5).timeout
 	_spawn_traffic()
@@ -245,6 +262,24 @@ func _ready() -> void:
 	spawn_delivery_markers()
 	_start_zone_debug()
 	_spawn_rockets()
+	_spawn_health_pickups()
+	_cop_countdown()
+	damage_flash.visible = false
+
+func _cop_countdown() -> void:
+	cop_warning_label.text = "COPS COMING IN 3..."
+	cop_warning_label.modulate = Color(1, 0, 0, 1)
+	await get_tree().create_timer(1.0).timeout
+	cop_warning_label.text = "COPS COMING IN 2..."
+	await get_tree().create_timer(1.0).timeout
+	cop_warning_label.text = "COPS COMING IN 1..."
+	await get_tree().create_timer(1.0).timeout
+	cop_warning_label.text = "COPS ARE HERE!"
+	cops_enabled = true
+	_spawn_cop()
+	await get_tree().create_timer(0.8).timeout
+	var tween = create_tween()
+	tween.tween_property(cop_warning_label, "modulate:a", 0.0, 0.5)
 
 func _start_zone_debug() -> void:
 	while true:
@@ -280,6 +315,8 @@ func _update_health_bar() -> void:
 	health_bar.value = $Car.health
 
 func _check_cop_spawn() -> void:
+	if not cops_enabled:
+		return
 	var threshold = int(score / 1500) * 1500
 	if threshold > last_cop_threshold:
 		last_cop_threshold = threshold
@@ -291,6 +328,6 @@ func _spawn_cop() -> void:
 	var cop = CopScene.instantiate()
 	cop_spawn_angle += 137.5
 	var angle_rad = deg_to_rad(cop_spawn_angle)
-	var offset = Vector2(cos(angle_rad), sin(angle_rad)) * 550
+	var offset = Vector2(cos(angle_rad), sin(angle_rad)) * 900
 	cop.global_position = $Car.global_position + offset
 	add_child(cop)

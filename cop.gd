@@ -15,6 +15,9 @@ const STUCK_TIME := 1.5
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
+	$SirenSound.play()
+	$RamArea.body_entered.connect(_on_ram_area_body_entered)
+	
 	var roll = randf()
 	var cop_type: int
 	if roll < 0.5:
@@ -29,10 +32,13 @@ func _ready() -> void:
 	RAM_DAMAGE  = data.damage
 	TURN_SPEED  = data.turn
 
-	var anim_name = ["Fast", "Medium", "Slow"][cop_type]
-	$AnimatedSprite2D.play(anim_name)
-
+	$AnimatedSprite2D.play(["Fast", "Slow", "Medium"][cop_type])
 	last_pos = global_position
+
+func _on_ram_area_body_entered(body: Node) -> void:
+	if body.name == "Car" and ram_cooldown <= 0:
+		body.take_damage(RAM_DAMAGE)
+		ram_cooldown = RAM_COOLDOWN_TIME
 
 func _physics_process(delta: float) -> void:
 	if player == null:
@@ -49,7 +55,6 @@ func _physics_process(delta: float) -> void:
 		last_pos = global_position
 
 	var direction = (player.global_position - global_position).normalized()
-
 	var target_velocity = direction * CHASE_SPEED
 	velocity = velocity.lerp(target_velocity, ACCELERATION * delta)
 	velocity = velocity.limit_length(CHASE_SPEED * 1.2)
@@ -59,11 +64,3 @@ func _physics_process(delta: float) -> void:
 		rotation = lerp_angle(rotation, target_angle, TURN_SPEED * delta)
 
 	move_and_slide()
-
-	if ram_cooldown <= 0:
-		for i in get_slide_collision_count():
-			var collision = get_slide_collision(i)
-			if collision.get_collider().name == "Car":
-				collision.get_collider().take_damage(RAM_DAMAGE)
-				ram_cooldown = RAM_COOLDOWN_TIME
-				break

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ctwl2aoyqwyni" path="res://Fast Fury Assets/Fast Fury Assets/Vehicles/police_cars.png" id="1_0qtrv"]
 [ext_resource type="Script" uid="uid://d4jah7ocscnn1" path="res://cop.gd" id="1_a157g"]
+[ext_resource type="AudioStream" uid="uid://dm6no0updj1he" path="res://Sprites/zapsplat_emergency_police_siren_isolated_clean_002_63708.mp3" id="3_a157g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0qtrv"]
 atlas = ExtResource("1_0qtrv")
@@ -36,7 +37,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_a157g")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Fast",
 "speed": 5.0
 }, {
@@ -47,7 +48,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xwtm4")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Medium",
 "speed": 5.0
 }, {
@@ -58,7 +59,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nip4t")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Slow",
 "speed": 6.0
 }]
@@ -66,6 +67,9 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xwtm4"]
 radius = 5.0
 height = 18.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(12, 20)
 
 [node name="Cop" type="CharacterBody2D" unique_id=1329868643]
 script = ExtResource("1_a157g")
@@ -77,3 +81,13 @@ autoplay = "Slow"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=480815645]
 shape = SubResource("CapsuleShape2D_xwtm4")
+
+[node name="SirenSound" type="AudioStreamPlayer2D" parent="." unique_id=1810436273]
+stream = ExtResource("3_a157g")
+max_distance = 1000.0
+attenuation = 4.5947866
+
+[node name="RamArea" type="Area2D" parent="." unique_id=622922370]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RamArea" unique_id=201264702]
+shape = SubResource("RectangleShape2D_g4v7s")
