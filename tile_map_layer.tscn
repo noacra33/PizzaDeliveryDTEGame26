@@ -5045,6 +5045,17 @@ offset_bottom = 648.0
 mouse_filter = 2
 color = Color(1, 0, 0, 1)
 
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=2124319718]
+offset_left = 20.0
+offset_top = 560.0
+offset_right = 254.0
+offset_bottom = 633.0
+theme_override_fonts/font = ExtResource("4_bik5n")
+text = "Controls:
+Move - WASD
+Deliver pizza - space
+Use powerup - E"
+
 [node name="DeliveryMarkers" type="Node2D" parent="." unique_id=1584698029]
 
 [node name="Extras" type="Node2D" parent="." unique_id=1244479807]
